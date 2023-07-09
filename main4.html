@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vue Example</title>
+    <script src="../frontside/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="css/style4.css">
+    <script src="js/myscript.js"></script>
+    
+</head>
+<body>
+    <div id="app">
+        <div class="logo">
+            <img src="../frontside/img/logo.svg" alt="SVG Image" >
+            <h4>visual decaf</h4>
+        </div>
+        <div class="about">
+            <h5>parser</h5>
+            <p> parser就是把token流转化为语法分析树，也叫语法分析器</p>
+        </div>
+        <div class="container">
+            <div id="editor"></div>
+            <textarea type="text" class="textbox" > </textarea>
+        </div>
+        <div class="btn">
+            <button id="myButton" disabled>下一步</button>
+        </div>
+    </div>
+
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        var myButton = document.getElementById("myButton");
+        editor.session.on("change", function () {
+        if (editor.getValue().trim().length > 0) {
+            myButton.style.backgroundColor = "blue";
+            myButton.disabled = false;
+        } else {
+            myButton.style.backgroundColor = "";
+            myButton.disabled = true;
+        }
+    });
+
+ 
+    var content = decodeURIComponent(window.location.href.split("?")[1].split("=")[1]);
+    editor.setValue(content);
+ 
+     myButton.addEventListener("click", function() {
+         if (!myButton.disabled) {
+             console.log(editor.getValue());
+            //  window.location.href = "main2.html?content=" + encodeURIComponent(editor.getValue());
+         }
+     });
+    </script>
+</body>
+</html>
+<!-- 
+    
+var textbox = document.querySelector("textarea.textbox");
+editor.session.on("change", function() {
+    textbox.value = editor.getValue();
+});
+
+textbox.addEventListener("input", function() {
+    editor.setValue(textbox.value);
+}); -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vue Example</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/myscript.js"></script>
+    
+</head>
+<body>
+    <div id="app">
+        <div class="logo">
+            <img src="../frontside/img/logo.svg" alt="SVG Image" >
+            <h4>visual decaf</h4>
+        </div>
+        <div class="about">
+            <h5>scanner</h5>
+            <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                展示将输入的字符串转化为可视化的token流</p>
+        </div>
+        <div class="container">
+            <input type="text" class="textbox first" v-model="text">
+            <input type="text" class="textbox second" v-model="textDisplay">
+        </div>
+        <div class="btn">
+            <button v-bind:style="{ backgroundColor: buttonColor }" v-bind:disabled="isButtonDisabled" v-on:click="navigateToMain2">下一步</button>
+        </div>
+    </div>
+
+    <script>
+        var app = Vue.createApp({
+            data() {
+                return {
+                    text: '',
+                    textDisplay: ''
+                }
+            },
+            computed: {
+                buttonColor() {
+                    return this.text !== '' ? 'blue' : 'gray';
+                },
+                isButtonDisabled() {
+                    return this.text === '';
+                }
+            },
+            methods: {
+                navigateToMain2() {
+                    if (this.text !== '') {
+                        window.location.href = 'main2.html';
+                    }
+                }
+            },
+            watch: {
+                text(newValue) {
+                    this.textDisplay = newValue;
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
