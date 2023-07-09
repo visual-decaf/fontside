@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>visual decaf</title>
+    <script src="../frontside/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+   <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="head">
+        <div class="logo">
+            <img src="../frontside/img/logo.svg" alt="SVG Image" >
+            <h4>visual decaf</h4>
+        </div>
+    </div>
+    <div class="topcontainer">
+        <div class="container">
+            <div class="about">
+                <h5>scanner</h5>
+                <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                    展示将输入的字符串转化为可视化的token流</p>
+            </div>
+            <div id="editor"></div>
+            <div class="btn">
+                <button id="myButton" disabled>提交</button>
+            </div>
+        </div>
+        <div class="container">
+            <div class="about">
+                <h5>parser</h5>
+                <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                    展示将输入的字符串转化为可视化的token流</p>
+            </div>
+            <div id="editor"></div>
+            <div class="btn">
+                <button id="myButton" disabled>生成Token</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="about">
+            <h5>scanner</h5>
+            <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                展示将输入的字符串转化为可视化的token流</p>
+        </div>
+        <div id="editor1"></div>
+        <div class="btn">
+            <button id="myButton" disabled>提交</button>
+        </div>
+    </div>
+    <script>
+        var editor = ace.edit("editor", {
+        theme: "ace/theme/monokai",
+        mode: "ace/mode/javascript",
+        autoScrollEditorIntoView: true,
+        });
+        var myButton = document.getElementById("myButton");
+        editor.session.on("change", function () {
+        if (editor.getValue().trim().length > 0) {
+            myButton.style.backgroundColor = "blue";
+            myButton.disabled = false;
+        } else {
+            myButton.style.backgroundColor = "";
+            myButton.disabled = true;
+        }
+        });
+        
+        var editor1 = ace.edit("editor1", {
+        theme: "ace/theme/monokai",
+        mode: "ace/mode/javascript",
+        autoScrollEditorIntoView: true,
+        });
+    </script>
+</body>
+</html>

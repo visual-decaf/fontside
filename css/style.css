@@ -1,0 +1,108 @@
+*{
+	margin: 0;
+	padding:0;
+}
+.head{
+    width: 100%;
+    height: 40px;
+    background-color: rgb(9, 62, 38);
+    margin: 0%;
+}
+body{
+    height: auto; /* 修改为自动高度 */
+    overflow-y: scroll; /* 启用竖直方向的滚动条 */
+    display:flex;
+    font-size:30px;
+    
+    color:#fff;
+    /* background: linear-gradient(to bottom, #f5f5dc 0%, #fffaf0 100%); */
+    background-color: #f5f5dc;
+    /* background-size:400%; */
+    /* animation: bgmove 20s infinite; */
+    flex-direction: column;
+    }
+.logo{
+
+    display: flex;
+    position: relative;
+}
+.logo img{
+    margin:10px 20px 0 0;
+    width:30px;
+    height:30px;
+}
+.topcontainer{
+  width: 100%;
+  height: 30rem;
+  display: flex;
+  flex-direction: row;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-size: 30px;
+    width: 49.5%;
+    height: 30rem;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    margin: 5px;
+}
+.about{
+    width: 100%;
+    margin:2px 3px;
+}
+.about h5{
+	width:90vw;
+	color:  black;
+	font-size: 10px;
+}
+.about h5::before{
+    content:'';
+	display: inline-block;
+	width:5px;
+	height:10px;
+	margin-right: 10px;
+	background-color: black;
+}
+.about p{
+    color:  black;
+    font-size: 7px;
+	line-height: 1.8;
+	margin: 3px 3px;
+	text-indent:2em
+}
+#myButton {
+    position: absolute;
+    bottom: 1vh;
+    font-size: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10vw;
+    height: 5vh;
+    float: right;
+    /* margin: 0 0 0 290px; */
+    border: none;
+    border-radius: 10px;
+    background-color: #ccc;
+    color: #fff;
+    cursor: pointer;
+}
+#editor{
+    width: 95%;
+    height: 75%;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    margin: 8px;
+    opacity: 0.7;
+    font-size: 7px;
+}
+#editor1{
+    width: 95%;
+    height: 70%;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    margin: 8px;
+    opacity: 0.7;
+    font-size: 7px;
+}
