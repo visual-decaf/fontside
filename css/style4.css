@@ -15,7 +15,7 @@ body{
     animation: bgmove 20s infinite;
     flex-direction: column;
     }
-@keyframes bgmove{
+/* @keyframes bgmove{
     0%{
         background-position:0% 50% ;
     }
@@ -25,7 +25,7 @@ body{
     100%{
         background-position:0% 50% ;
     }
-}
+} */
 .logo{
     display: flex;
     position: relative;
