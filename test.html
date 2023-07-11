@@ -1,79 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>wangEditor default mode</title>
-  <link href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
-  <!-- <link href="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet"> -->
-  <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
-  <link href="./css/layout.css" rel="stylesheet">
-
-  <script src="./js/custom-elem.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo</title>
+  <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+  <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+  <!-- <link href="//unpkg.com/layui@2.8.10/dist/css/layui.css" rel="stylesheet"> -->
+  <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
+  <link href="./css/test.css" rel="stylesheet">
 </head>
-
 <body>
-  <demo-nav title="wangEditor default mode"></demo-nav>
-  <div class="page-container">
-    <div class="page-left">
-      <demo-menu></demo-menu>
-    </div>
-    <div class="page-right">
-      <!-- 编辑器 DOM -->
-      <div style="border: 1px solid #ccc;">
-        <div id="editor-toolbar" style="border-bottom: 1px solid #ccc;"></div>
-        <div id="editor-text-area" style="height: 500px"></div>
-      </div>
 
-      <!-- 内容状态 -->
-      <p style="background-color: #f1f1f1;">
-        Text length: <span id="total-length"></span>；
-        Selected text length: <span id="selected-length"></span>；
-      </p>
-    </div>
-  </div>
+ 
+    <ul class="layui-nav layui-bg-cyan">
+        <input type="checkbox" id="check" />
+        <label for="check">
+            <svg viewBox="0 0 30 30" width="30" height="30">
+                <path id="one" d="M4 10h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+                <path id="two" d="M4 20h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+            </svg> 
+        </label>
+            <div class="head">
+            <div class="logo">
+                <img src="./img/logo.svg" alt="SVG Image" > 
+                <h4>visual decaf</h4>
+            </div>
+            </div>
+      <li class="layui-nav-item"><a href="">藏青导航</a></li>
+      <li class="layui-nav-item"><a href="">菜单1</a></li>
+      <li class="layui-nav-item"><a href="">菜单2</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">更多</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">选项1</a></dd>
+          <dd><a href="">选项2</a></dd>
+          <dd><a href="">选项3</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">菜单3</a></li>
+    </ul>
+    <aside>
+        <div class="top">
+            <h2>团队成员</h2>
+            <ul>
+                <li>姚祉圻</li>
+                <li>许仕佳</li>
+                <li>范嘉豪</li>
+                <li>梁国轩</li>
+                <li>欧宇杰</li>
+            </ul>
+        </div>
+        <div class="bottom">
+            <p>&copy; 2023 by van</p>
+        </div>
+    </aside>
+    <article>
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"></script> -->
-  <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
-  <script>
-    const E = window.wangEditor
+        
+        <div class="topcontainer">
+            <div class="container1">
+                <div class="about">
+                    <h5>compiler</h5>
+                    <p> 请在下面输入你的decaf代码,点击提交即可开始编译</p>
+                </div>
+                <div id="editor"></div>
+                <div class="btn">
+                    <button id="myButton" disabled>提交</button>
+                </div>
+            </div>
+    
+            <div class="container2">
+                <div class="about">
+                    <h5>sacnner</h5>
+                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                        展示将输入的字符串转化为可视化的token流</p>
+                </div>
+                <textarea class="scanner"></textarea>
+                <div class="btn">
+                    <button id="myButton2" disabled>生成Token</button>
+                </div>
+            </div>
+    
+            <div class="container3">
+                <div class="about">
+                    <h5>parser</h5>
+                    <p> parser将token流转化为syntax tree</p>
+                </div>
+                <div class="syntaxtree"></div>
+                <div class="btn">
+                    <button id="myButton3" disabled>生成语法树</button>
+                </div>
+            </div>
+        </div>
+        <div class="topcontainer2">
+            <div class="container4">
+                <div class="about">
+                    <h5>semantic analysize</h5>
+                    <p>生成bytecode</p>
+                </div>
+                <textarea class="bytecode"></textarea>
+                <div class="btn">
+                    <button id="myButton4" disabled>生成语法树</button>
+                </div>
+            </div>
+            <div class="container5">
+                <div class="about">
+                    <h5>scanner</h5>
+                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                        展示将输入的字符串转化为可视化的token流</p>
+                </div>
+                <div class="table"> 
+                  <div class="table1"></div>
+                  <div id="editor1"></div>
+                  <div class="table2"></div>
+                </div>
+                
+                <div class="btn">
+                    <button id="myButton5" disabled>提交</button>
+                </div>
+            </div>
+        </div>
+    </article>
+    <script>
 
-    // 切换语言
-    const LANG = location.href.indexOf('lang=en') > 0 ? 'en' : 'zh-CN'
-    E.i18nChangeLanguage(LANG)
-
-    window.editor = E.createEditor({
-      selector: '#editor-text-area',
-      html: '<p><br></p>',
-      config: {
-        placeholder: 'Type here...',
-        MENU_CONF: {
-          uploadImage: {
-            fieldName: 'your-fileName',
-            base64LimitSize: 10 * 1024 * 1024 // 10M 以下插入 base64
-          }
-        },
-        onChange(editor) {
-          console.log(editor.getHtml())
-
-          // 选中文字
-          const selectionText = editor.getSelectionText()
-          document.getElementById('selected-length').innerHTML = selectionText.length
-          // 全部文字
-          const text = editor.getText().replace(/\n|\r/mg, '')
-          document.getElementById('total-length').innerHTML = text.length
+        var editor = ace.edit("editor", {
+        theme: "ace/theme/monokai",
+        mode: "ace/mode/javascript",
+        autoScrollEditorIntoView: true,
+        });
+        editor.setValue("function foo(items) {var x = ");
+        var myButton = document.getElementById("myButton");
+        editor.session.on("change", function () {
+        if (editor.getValue().trim().length > 0) {
+            myButton.style.backgroundColor = "blue";
+            myButton.disabled = false;
+        } else {
+            myButton.style.backgroundColor = "";
+            myButton.disabled = true;
         }
+        });
+        var scanner = document.querySelector("textarea.scanner");
+
+       editor.session.on("change", function() {
+        scanner.value = editor.getValue();
+       });
+   
+       scanner.addEventListener("input", function() {
+           editor.setValue(scanner.value);
+       });
+       // 对myButton1点击事件的响应
+       myButton.addEventListener("click", function() {
+       if (!myButton.disabled) {
+        console.log(editor.getValue());
+        myButton.disabled = true;
+        myButton.style.backgroundColor = "";
+        document.getElementById("myButton2").disabled = false;
+        document.getElementById("myButton2").style.backgroundColor = "blue";
       }
-    })
-
-    window.toolbar = E.createToolbar({
-      editor,
-      selector: '#editor-toolbar',
-      config: {}
-    })
-  </script>
+       });
+      // 对myButton2点击事件的响应
+       document.getElementById("myButton2").addEventListener("click", function() {
+       if (!document.getElementById("myButton2").disabled) {
+        document.getElementById("myButton2").disabled = true;
+        document.getElementById("myButton2").style.backgroundColor = "";
+        document.getElementById("myButton3").disabled = false;
+        document.getElementById("myButton3").style.backgroundColor = "blue";
+      }
+      });
+     var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
+     </script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->
+<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
-
 </html>
