@@ -4,31 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>visual decaf</title>
-    <script src="../frontside/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+    <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <div class="head">
         <div class="logo">
-            <img src="../frontside/img/logo.svg" alt="SVG Image" >
+            <!-- <img src="./img/logo.svg" alt="SVG Image" > -->
+            <label for="check">
+                <svg viewBox="0 0 30 30" width="30" height="30">
+                    <path id="one" d="M4 10h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+                    <path id="two" d="M4 20h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+                </svg> 
+            </label>
             <h4>visual decaf</h4>
         </div>
     </div>
+    
     <div class="topcontainer">
-        <div class="container">
+        <div class="container1">
             <div class="about">
-                <h5>scanner</h5>
-                <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
-                    展示将输入的字符串转化为可视化的token流</p>
+                <h5>compiler</h5>
+                <p> 请在下面输入你的decaf代码,点击提交即可开始编译</p>
             </div>
             <div id="editor"></div>
             <div class="btn">
                 <button id="myButton" disabled>提交</button>
             </div>
         </div>
-        <div class="container">
+
+        <div class="container2">
             <div class="about">
                 <h5>sacnner</h5>
                 <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
@@ -36,27 +43,60 @@
             </div>
             <textarea class="scanner"></textarea>
             <div class="btn">
-                <button id="myButton" disabled>生成Token</button>
+                <button id="myButton2" disabled>生成Token</button>
+            </div>
+        </div>
+
+        <div class="container3">
+            <div class="about">
+                <h5>parser</h5>
+                <p> parser将token流转化为syntax tree</p>
+            </div>
+            <div class="syntaxtree"></div>
+            <div class="btn">
+                <button id="myButton3" disabled>生成语法树</button>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="about">
-            <h5>scanner</h5>
-            <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
-                展示将输入的字符串转化为可视化的token流</p>
+    <div class="topcontainer2">
+        <div class="container4">
+            <div class="about">
+                <h5>semantic analysize</h5>
+                <p>生成bytecode</p>
+            </div>
+            <textarea class="bytecode"></textarea>
+            <div class="btn">
+                <button id="myButton4" disabled>生成语法树</button>
+            </div>
         </div>
-        <div id="editor1"></div>
-        <div class="btn">
-            <button id="myButton" disabled>提交</button>
+        <div class="container5">
+            <div class="about">
+                <h5>scanner</h5>
+                <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                    展示将输入的字符串转化为可视化的token流</p>
+            </div>
+            <div class="table"> 
+              <div class="table1"></div>
+              <div id="editor1"></div>
+              <div class="table2"></div>
+            </div>
+            
+            <div class="btn">
+                <button id="myButton5" disabled>提交</button>
+            </div>
         </div>
     </div>
+    
+
+
     <script>
+
         var editor = ace.edit("editor", {
         theme: "ace/theme/monokai",
         mode: "ace/mode/javascript",
         autoScrollEditorIntoView: true,
         });
+        editor.setValue("function foo(items) {var x = ");
         var myButton = document.getElementById("myButton");
         editor.session.on("change", function () {
         if (editor.getValue().trim().length > 0) {
@@ -67,12 +107,39 @@
             myButton.disabled = true;
         }
         });
-        
-        var editor1 = ace.edit("editor1", {
-        theme: "ace/theme/monokai",
-        mode: "ace/mode/javascript",
-        autoScrollEditorIntoView: true,
-        });
-    </script>
+        var scanner = document.querySelector("textarea.scanner");
+
+       editor.session.on("change", function() {
+        scanner.value = editor.getValue();
+       });
+   
+       scanner.addEventListener("input", function() {
+           editor.setValue(scanner.value);
+       });
+       // 对myButton1点击事件的响应
+       myButton.addEventListener("click", function() {
+       if (!myButton.disabled) {
+        console.log(editor.getValue());
+        myButton.disabled = true;
+        myButton.style.backgroundColor = "";
+        document.getElementById("myButton2").disabled = false;
+        document.getElementById("myButton2").style.backgroundColor = "blue";
+      }
+       });
+      // 对myButton2点击事件的响应
+       document.getElementById("myButton2").addEventListener("click", function() {
+       if (!document.getElementById("myButton2").disabled) {
+        document.getElementById("myButton2").disabled = true;
+        document.getElementById("myButton2").style.backgroundColor = "";
+        document.getElementById("myButton3").disabled = false;
+        document.getElementById("myButton3").style.backgroundColor = "blue";
+      }
+      });
+     var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
+     </script>
 </body>
 </html>

@@ -1,86 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Editor</title>
-  <style type="text/css" media="screen">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wangEditor default mode</title>
+  <link href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet"> -->
+  <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+  <link href="./css/layout.css" rel="stylesheet">
 
-	.ace_editor {
-		border: 1px solid lightgray;
-		margin: auto;
-		height: 200px;
-		width: 80%;
-	}
-	.scrollmargin {
-		height: 80px;
-	}
-	.scrollmargin2 {
-		height: 180px;
-	}
-    </style>
+  <script src="./js/custom-elem.js"></script>
 </head>
+
 <body>
-<pre id="editor1">autoresizing editor</pre>
-<div class="scrollmargin"></div>
-<pre id="editor2">minHeight = 2 lines</pre>
-<div class="scrollmargin"></div>
-<pre id="editor3" style="width: 40%;"></pre>
-<div class="scrollmargin"></div>
-<pre id="editor"></pre>
-<div class="scrollmargin2"></div>
-<pre id="editor4" style="width: 40%;transform:scale(1.5)"></pre>
-<div class="scrollmargin2"></div>
+  <demo-nav title="wangEditor default mode"></demo-nav>
+  <div class="page-container">
+    <div class="page-left">
+      <demo-menu></demo-menu>
+    </div>
+    <div class="page-right">
+      <!-- 编辑器 DOM -->
+      <div style="border: 1px solid #ccc;">
+        <div id="editor-toolbar" style="border-bottom: 1px solid #ccc;"></div>
+        <div id="editor-text-area" style="height: 500px"></div>
+      </div>
 
-<script src="kitchen-sink/require.js"></script>
-<script>
-// setup paths
-require.config({paths: { "ace" : "../src"}});
-// load ace and extensions
-require(["ace/ace", "ace/ext/language_tools"], function(ace) {
-    var editor1 = ace.edit("editor1", {
-        theme: "ace/theme/tomorrow_night_eighties",
-        mode: "ace/mode/javascript",
-        maxLines: 30,
-        wrap: true,
-        autoScrollEditorIntoView: true
-    });
+      <!-- 内容状态 -->
+      <p style="background-color: #f1f1f1;">
+        Text length: <span id="total-length"></span>；
+        Selected text length: <span id="selected-length"></span>；
+      </p>
+    </div>
+  </div>
 
-    var editor2 = ace.edit("editor2", {
-        theme: "ace/theme/tomorrow_night_blue",
-        mode: "ace/mode/css",
-        autoScrollEditorIntoView: true,
-        maxLines: 30,
-        minLines: 2
-    });
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"></script> -->
+  <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
+  <script>
+    const E = window.wangEditor
 
-    var editor = ace.edit("editor3");
-    editor.setOptions({
-        autoScrollEditorIntoView: true,
-        maxLines: 8
-    });
-    editor.renderer.setScrollMargin(10, 10, 10, 10);
-    
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/tomorrow");
-    editor.session.setMode("ace/mode/html");
-    editor.setAutoScrollEditorIntoView(true);
-    editor.setOption("maxLines", 100); 
-    window.editor = editor;
-    
-    var editor4 = ace.edit("editor4", {
-        theme: "ace/theme/tomorrow_night_blue",
-        mode: "ace/mode/javascript",
-        autoScrollEditorIntoView: true,
-        maxLines: 30,
-        minLines: 100,
-        hasCssTransforms: true,
-        value: "transformed editor" + "\n".repeat(100)
-    });
-});
-</script>
+    // 切换语言
+    const LANG = location.href.indexOf('lang=en') > 0 ? 'en' : 'zh-CN'
+    E.i18nChangeLanguage(LANG)
 
-<script src="./show_own_source.js"></script>
+    window.editor = E.createEditor({
+      selector: '#editor-text-area',
+      html: '<p><br></p>',
+      config: {
+        placeholder: 'Type here...',
+        MENU_CONF: {
+          uploadImage: {
+            fieldName: 'your-fileName',
+            base64LimitSize: 10 * 1024 * 1024 // 10M 以下插入 base64
+          }
+        },
+        onChange(editor) {
+          console.log(editor.getHtml())
 
+          // 选中文字
+          const selectionText = editor.getSelectionText()
+          document.getElementById('selected-length').innerHTML = selectionText.length
+          // 全部文字
+          const text = editor.getText().replace(/\n|\r/mg, '')
+          document.getElementById('total-length').innerHTML = text.length
+        }
+      }
+    })
+
+    window.toolbar = E.createToolbar({
+      editor,
+      selector: '#editor-toolbar',
+      config: {}
+    })
+  </script>
 </body>
+
 </html>
