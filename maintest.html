@@ -105,7 +105,7 @@
                 </div>
                 <textarea class="bytecode"></textarea>
                 <div class="btn">
-                    <button id="myButton4" disabled>生成语法树</button>
+                    <button id="myButton4" disabled>生成bytecode</button>
                 </div>
             </div>
             <div class="container5">
@@ -121,7 +121,7 @@
                 </div>
                 
                 <div class="btn">
-                    <button id="myButton5" disabled>提交</button>
+                    <button id="myButton5" disabled>下一步</button>
                 </div>
             </div>
         </div>
@@ -149,14 +149,14 @@
                 buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
             if(subtree.hasOwnProperty("right"))
                 buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
-        }
-      
+     }
+        //   渲染编辑器
         var editor = ace.edit("editor", {
         theme: "ace/theme/monokai",
         mode: "ace/mode/javascript",
         autoScrollEditorIntoView: true,
         });
-        editor.setValue("function foo(items) {var x = ");
+        // editor.setValue("function foo(items) {var x = ");
         var myButton = document.getElementById("myButton");
         editor.session.on("change", function () {
         if (editor.getValue().trim().length > 0) {
@@ -169,13 +169,14 @@
         });
         var scanner = document.querySelector("textarea.scanner");
 
-       editor.session.on("change", function() {
-        scanner.value = editor.getValue();
-       });
+    //    editor.session.on("change", function() {
+    //     scanner.value = editor.getValue();
+    //    });
    
        scanner.addEventListener("input", function() {
            editor.setValue(scanner.value);
        });
+
        // 对myButton1点击事件的响应
        myButton.addEventListener("click", function() {
        if (!myButton.disabled) {
@@ -184,8 +185,31 @@
         myButton.style.backgroundColor = "";
         document.getElementById("myButton2").disabled = false;
         document.getElementById("myButton2").style.backgroundColor = "blue";
-      }
+        // 上传编辑器代码
+        var myHeaders = new Headers();
+         myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
+         
+         var formdata = new FormData();
+         formdata.append("code", editor.getValue());
+         
+         var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+         };
+       
+         fetch("http://test-cn.your-api-server.com/", requestOptions)
+           .then(response => {
+            console.log('Status code:', response.status);
+            return response.text();
+             })
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        }
        });
+
+
       // 对myButton2点击事件的响应
        document.getElementById("myButton2").addEventListener("click", function() {
        if (!document.getElementById("myButton2").disabled) {
@@ -193,14 +217,33 @@
         document.getElementById("myButton2").style.backgroundColor = "";
         document.getElementById("myButton3").disabled = false;
         document.getElementById("myButton3").style.backgroundColor = "blue";
-      }
+
+        var myHeaders = new Headers();
+       myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
+       
+       var requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+       };
+       
+       fetch("http://test-cn.your-api-server.com/tokens?id=", requestOptions)
+            .then(response => {
+            console.log('Status code:', response.status);
+            return response.text();
+             })
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+       }
       });
 
+      // 对myButton3点击事件的响应
       document.getElementById("myButton3").addEventListener("click", function() {
        if (!document.getElementById("myButton3").disabled) {
         document.getElementById("myButton3").disabled = true;
         document.getElementById("myButton3").style.backgroundColor = "";
-
+        document.getElementById("myButton4").disabled = false;
+        document.getElementById("myButton4").style.backgroundColor = "blue";
 
         //json-interface
         let jsonStr = '{"operation":"DIVIDE","left":{"operation":"MULTIPLY","left":{"value":1},"right":{"value":2}},"right":{"value":3}}';
