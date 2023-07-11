@@ -173,6 +173,47 @@
      mode: "ace/mode/javascript",
      autoScrollEditorIntoView: true,
      });
+
+         //json-interface
+         var jsonStr = 'jsonFromServer';
+    //buildtree function
+      var nodelist = [];
+      var edgelist = [];
+      var count=1;
+        function buildtree(data,parentid,nodelevel){
+            let subtree = JSON.parse(data);
+            let currentid=count;
+            if(subtree.hasOwnProperty("operation"))
+                nodelist.push({id: count, label: subtree.operation, level: nodelevel});
+            if(subtree.hasOwnProperty("value"))
+                nodelist.push({id: count, label: subtree.value.toString(), level: nodelevel});
+            if(parentid!=0)
+                edgelist.push({from: parentid, to: count});
+            count++;
+            if(subtree.hasOwnProperty("left"))
+                buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
+            if(subtree.hasOwnProperty("right"))
+                buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
+        }
+      
+    buildtree(jsonStr,0,1);
+    console.log(nodelist);
+    console.log(edgelist);
+    var nodes = new vis.DataSet(nodelist);
+    var edges = new vis.DataSet(edgelist)
+      var container = document.getElementById("mynetwork");
+      var data = {
+        nodes: nodes,
+        edges: edges,
+      };
+      var options = {
+          layout: {
+            hierarchical: {
+              direction: "UD"
+            },
+          },
+        };
+      var network = new vis.Network(container, data, options);
      </script>
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->

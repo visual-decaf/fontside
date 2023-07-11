@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo</title>
+  <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
+  <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+  <!-- <link href="//unpkg.com/layui@2.8.10/dist/css/layui.css" rel="stylesheet"> -->
+  <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
+  <link href="./css/test.css" rel="stylesheet">
+</head>
+<body>
+
+ 
+    <ul class="layui-nav layui-bg-cyan">
+        <input type="checkbox" id="check" />
+        <label for="check">
+            <svg viewBox="0 0 30 30" width="30" height="30">
+                <path id="one" d="M4 10h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+                <path id="two" d="M4 20h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+            </svg> 
+        </label>
+            <div class="head">
+            <div class="logo">
+                <img src="./img/logo.svg" alt="SVG Image" > 
+                <h4>visual decaf</h4>
+            </div>
+            </div>
+      <li class="layui-nav-item"><a href="">藏青导航</a></li>
+      <li class="layui-nav-item"><a href="">菜单1</a></li>
+      <li class="layui-nav-item"><a href="">菜单2</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">更多</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">选项1</a></dd>
+          <dd><a href="">选项2</a></dd>
+          <dd><a href="">选项3</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">菜单3</a></li>
+    </ul>
+    <aside>
+        <div class="top">
+            <h2>团队成员</h2>
+            <ul>
+                <li>姚祉圻</li>
+                <li>许仕佳</li>
+                <li>范嘉豪</li>
+                <li>梁国轩</li>
+                <li>欧宇杰</li>
+            </ul>
+        </div>
+        <div class="bottom">
+            <p>&copy; 2023 by van</p>
+        </div>
+    </aside>
+    <article>
+
+        
+        <div class="topcontainer">
+            <div class="container1">
+                <div class="about">
+                    <h5>compiler</h5>
+                    <p> 请在下面输入你的decaf代码,点击提交即可开始编译</p>
+                </div>
+                <div id="editor"></div>
+                <div class="btn">
+                    <button id="myButton" disabled>提交</button>
+                </div>
+            </div>
+    
+            <div class="container2">
+                <div class="about">
+                    <h5>sacnner</h5>
+                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                        展示将输入的字符串转化为可视化的token流</p>
+                </div>
+                <textarea class="scanner"></textarea>
+                <div class="btn">
+                    <button id="myButton2" disabled>生成Token</button>
+                </div>
+            </div>
+    
+            <div class="container3">
+                <div class="about">
+                    <h5>parser</h5>
+                    <p> parser将token流转化为syntax tree</p>
+                </div>
+                <div class="syntaxtree" id="syntax_tree"></div>
+                <div class="btn">
+                    <button id="myButton3" disabled>生成语法树</button>
+                </div>
+            </div>
+        </div>
+        <div class="topcontainer2">
+            <div class="container4">
+                <div class="about">
+                    <h5>semantic analysize</h5>
+                    <p>生成bytecode</p>
+                </div>
+                <textarea class="bytecode"></textarea>
+                <div class="btn">
+                    <button id="myButton4" disabled>生成语法树</button>
+                </div>
+            </div>
+            <div class="container5">
+                <div class="about">
+                    <h5>scanner</h5>
+                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
+                        展示将输入的字符串转化为可视化的token流</p>
+                </div>
+                <div class="table"> 
+                  <div class="table1"></div>
+                  <div id="editor1"></div>
+                  <div class="table2"></div>
+                </div>
+                
+                <div class="btn">
+                    <button id="myButton5" disabled>提交</button>
+                </div>
+            </div>
+        </div>
+    </article>
+    <script>
+    //Initialized var for syntax tree
+    var nodelist = [];
+    var edgelist = [];
+    var count=1;
+    //buildtree function
+    function buildtree(data,parentid,nodelevel){
+            let subtree = JSON.parse(data);
+            let currentid=count;
+            if(subtree.hasOwnProperty("operation"))
+                nodelist.push({id: count, label: subtree.operation, level: nodelevel});
+            if(subtree.hasOwnProperty("value"))
+                nodelist.push({id: count, label: subtree.value.toString(), level: nodelevel});
+            if(parentid!=0)
+                edgelist.push({from: parentid, to: count});
+            count++;
+            if(subtree.hasOwnProperty("left"))
+                buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
+            if(subtree.hasOwnProperty("right"))
+                buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
+        }
+      
+
+        var editor = ace.edit("editor", {
+        theme: "ace/theme/monokai",
+        mode: "ace/mode/javascript",
+        autoScrollEditorIntoView: true,
+        });
+        editor.setValue("function foo(items) {var x = ");
+        var myButton = document.getElementById("myButton");
+        editor.session.on("change", function () {
+        if (editor.getValue().trim().length > 0) {
+            myButton.style.backgroundColor = "blue";
+            myButton.disabled = false;
+        } else {
+            myButton.style.backgroundColor = "";
+            myButton.disabled = true;
+        }
+        });
+        var scanner = document.querySelector("textarea.scanner");
+
+       editor.session.on("change", function() {
+        scanner.value = editor.getValue();
+       });
+   
+       scanner.addEventListener("input", function() {
+           editor.setValue(scanner.value);
+       });
+       // 对myButton1点击事件的响应
+       myButton.addEventListener("click", function() {
+       if (!myButton.disabled) {
+        console.log(editor.getValue());
+        myButton.disabled = true;
+        myButton.style.backgroundColor = "";
+        document.getElementById("myButton2").disabled = false;
+        document.getElementById("myButton2").style.backgroundColor = "blue";
+      }
+       });
+      // 对myButton2点击事件的响应
+       document.getElementById("myButton2").addEventListener("click", function() {
+       if (!document.getElementById("myButton2").disabled) {
+        document.getElementById("myButton2").disabled = true;
+        document.getElementById("myButton2").style.backgroundColor = "";
+        document.getElementById("myButton3").disabled = false;
+        document.getElementById("myButton3").style.backgroundColor = "blue";
+      }
+      });
+      //对myButton3点击事件的响应
+      document.getElementById("myButton3").addEventListener("click", function() {
+       if (!document.getElementById("myButton3").disabled) {
+        document.getElementById("myButton3").disabled = true;
+        document.getElementById("myButton3").style.backgroundColor = "";
+
+
+        //json-interface
+        let jsonStr = '{"operation":"DIVIDE","left":{"operation":"MULTIPLY","left":{"value":1},"right":{"value":2}},"right":{"value":3}}';
+        buildtree(jsonStr,0,1);
+        console.log(nodelist);
+        console.log(edgelist);
+        let nodes = new vis.DataSet(nodelist);
+        let edges = new vis.DataSet(edgelist)
+        let container = document.getElementById("syntax_tree");
+        let data = {
+            nodes: nodes,
+            edges: edges,
+        };
+        let options = {
+            layout: {
+                hierarchical: {
+                direction: "UD"
+                },
+            },
+        };
+        let network = new vis.Network(container, data, options);
+        nodelist = [];
+        edgelist = [];
+        count=1;
+        //document.getElementById("myButton4").disabled = false;
+        //document.getElementById("myButton4").style.backgroundColor = "blue";
+      }
+      });
+
+     var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
+
+    
+     </script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->
+<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+</body>
+</html>
