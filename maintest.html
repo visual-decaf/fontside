@@ -11,7 +11,7 @@
    <link rel="stylesheet" href="css/style5.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
     <style>
-       
+
     </style>
 </head>
 
@@ -80,7 +80,7 @@
                     <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
                         展示将输入的字符串转化为可视化的token流</p>
                 </div>
-                <textarea class="scanner"></textarea>
+                <textarea class="scanner" id ="token_scanner"></textarea>
                 <div class="btn">
                     <button id="myButton2" disabled>生成Token</button>
                 </div>
@@ -103,19 +103,36 @@
                     <h5>semantic analysize</h5>
                     <p>生成bytecode</p>
                 </div>
-                <textarea class="bytecode"></textarea>
+                <textarea class="bytecode" id = "byte_code"></textarea>
                 <div class="btn">
                     <button id="myButton4" disabled>生成bytecode</button>
                 </div>
             </div>
             <div class="container5">
                 <div class="about">
-                    <h5>scanner</h5>
-                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
-                        展示将输入的字符串转化为可视化的token流</p>
+                    <h5>堆栈，编辑器，符号表</h5>
+                    <p> 动态堆栈展示  编辑器跳转  符号表</p>
                 </div>
                 <div class="table"> 
-                  <div class="table1"></div>
+                  <div class="table1" id="table1">
+                    <div class="content">
+                    <div class="list">
+                        <div class="listblock">
+                            <div class="block"></div>
+                            <div class="block"></div>
+                            <div class="block"></div>
+                        </div>
+                    </div>
+                    <div class="stack">
+                        <div class="stackblock">
+                            <div class="block"></div>
+                            <div class="block"></div>
+                            <div class="block"></div>
+                        </div>
+                    </div>
+                  </div>
+                  </div>
+
                   <div id="editor1"></div>
                   <div class="table2"></div>
                 </div>
@@ -210,7 +227,7 @@
        });
 
 
-      // 对myButton2点击事件的响应
+       // 对myButton2点击事件的响应
        document.getElementById("myButton2").addEventListener("click", function() {
        if (!document.getElementById("myButton2").disabled) {
         document.getElementById("myButton2").disabled = true;
@@ -218,23 +235,53 @@
         document.getElementById("myButton3").disabled = false;
         document.getElementById("myButton3").style.backgroundColor = "blue";
 
-        var myHeaders = new Headers();
-       myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
-       
-       var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-       };
-       
-       fetch("http://test-cn.your-api-server.com/tokens?id=", requestOptions)
-            .then(response => {
-            console.log('Status code:', response.status);
-            return response.text();
-             })
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-       }
+        let jsonStr = {
+        "code": "1",
+        "msg": "操作成功",
+        "result": [
+        {
+            "type": "YYEOF",
+            "lexeme": "incididunt"
+        },
+        {
+            "type": "MINUS",
+            "lexeme": "aute officia quis"
+        },
+        {
+            "type": "PLUS",
+            "lexeme": "ex dolor labore eu"
+        },
+        {
+            "type": "EOL",
+            "lexeme": "et sit dolore qui amet"
+        },
+        {
+            "type": "INTEGER",
+            "lexeme": "consectetur dolor irure officia"
+        }
+        ]
+        }
+        //URL-GET-REQUEST
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("GET", "http://test-cn.your-api-server.com/tokens", false);
+        // xhr.onreadystatechange = function() {
+        // console.log(xhr.status);
+        // if (xhr.status == 200) {
+        // //json-interface
+        //     jsonStr =xhr.responseText;
+        // }
+        // };
+        // xhr.send();
+        let token_text = document.getElementById("token_scanner");
+
+        console.log(jsonStr);
+        let tokenlist=jsonStr.result;
+        console.log(tokenlist);
+        tokenlist.forEach(element => {
+            token_text.value+=('<'+element.type+', '+element.lexeme+'>\n');
+            console.log('<'+element.type+', '+element.lexeme+'>');
+        });
+      }
       });
 
       // 对myButton3点击事件的响应
@@ -277,6 +324,106 @@
      mode: "ace/mode/javascript",
      autoScrollEditorIntoView: true,
      });
+
+//      var table1 = document.querySelector('.table1');
+// var ctrlDown = false;
+// var scale = 1;
+
+// document.addEventListener('keydown', function(event) {
+//   if (event.key === 'Control') {
+//     ctrlDown = true;
+//   }
+// });
+
+// document.addEventListener('keyup', function(event) {
+//   if (event.key === 'Control') {
+//     ctrlDown = false;
+//   }
+// });
+
+// table1.addEventListener('wheel', function(event) {
+//   if (ctrlDown) {
+//     event.preventDefault();
+//     var delta = event.deltaY;
+//     scale = Math.min(Math.max(scale + delta * 0.001, 0.1), 10);
+//     var listblocks = table1.querySelectorAll('.listblock');
+//     var stackblocks = table1.querySelectorAll('.stackblock');
+//     for (var i = 0; i < listblocks.length; i++) {
+//       listblocks[i].style.transform = 'scale(' + scale + ')';
+//     }
+//     for (var i = 0; i < stackblocks.length; i++) {
+//       stackblocks[i].style.transform = 'scale(' + scale + ')';
+//     }
+//   }
+// });
+  // 对myButton4点击事件的响应
+  document.getElementById("myButton4").addEventListener("click", function() {
+        if (!document.getElementById("myButton4").disabled) {
+        document.getElementById("myButton4").disabled = true;
+        document.getElementById("myButton4").style.backgroundColor = "";
+        document.getElementById("myButton5").disabled = false;
+        document.getElementById("myButton5").style.backgroundColor = "blue";
+        let jsonStr = {
+    "code": "12",
+    "msg": "adipisicing in quis id",
+    "result": {
+        "bytecode": [
+            "GET_INSTANT 1",
+            "GET_INT_CONSTANT 2",
+            "MULTIPLY",
+            "GET_INSTANT 3",
+            "MOD"
+        ],
+        "resultType": "INT",
+        "constantPool": {
+            "intConstantPool": [
+                3
+            ],
+            "doubleConstantPool": [
+                3.14
+            ]
+        }
+    }
+}
+        //URL-GET-REQUEST
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("GET", "http://test-cn.your-api-server.com/program", false);
+        // xhr.onreadystatechange = function() {
+        // console.log(xhr.status);
+        // if (xhr.status == 200) {
+        // //json-interface
+        //     jsonStr =xhr.responseText;
+        // }
+        // };
+        // xhr.send();
+
+        let token_text = document.getElementById("byte_code");
+
+        console.log(jsonStr);
+        let tokenlist=jsonStr.result.bytecode;
+        console.log(tokenlist);
+        tokenlist.forEach(element => {
+            token_text.value+=element+'\n';
+            console.log(element);
+        })
+        
+      }
+      });
+
+
+var table = document.getElementById("table1");
+var content = table.querySelector(".content");
+var scale = 1;
+
+table.addEventListener("wheel", function(e) {
+  if (e.ctrlKey) {
+    e.preventDefault();
+    var delta = Math.sign(e.deltaY);
+    scale = Math.max(0.1, scale + delta * 0.1);
+    content.style.transform = "scale(" + scale + ")";
+  }
+});
+
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>

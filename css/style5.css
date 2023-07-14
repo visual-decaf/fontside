@@ -106,7 +106,7 @@ body{
     flex-direction: column;
     position: relative;
     font-size: 30px;
-    width: 29%;
+    width: 25%;
     height: 30rem;
     border: 3px solid #ccc;
     border-radius: 10px;
@@ -114,15 +114,16 @@ body{
 }
 .container5{
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     position: relative;
     font-size: 30px;
-    width: 70%;
+    width: 74%;
     height: 30rem;
     border: 3px solid #ccc;
     border-radius: 10px;
     margin: 5px;
 }
+
 .about{
     width: 100%;
     margin:2px 3px;
@@ -241,16 +242,16 @@ body{
     height: 72%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 6px;
+    margin: 7px;
     opacity: 0.7;
     font-size: 7px;
 }
 #editor1{
-    width: 50%;
+    width: 45%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
@@ -274,33 +275,84 @@ body{
 }
 .bytecode{
     width: 95%;
-    height: 70%;
+    height: 74%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
 .table{
     width: 100%;
-    height: 70%;
+    height: 74%;
     display: flex;
 }
 .table1{
-    width: 25%;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
+    overflow-x: auto;
+    overflow-y: auto;
+    /* overflow: hidden; */
+    
+}
+.table1 .content {
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+  }
+/* .table1 .listblock,
+.table1 .stackblock {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+} */
+.list{
+    width: 100%;
+    height: 18%;
+    background-color: #2ede98;
+}
+.listblock{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    width: 60em;
+    height: 5.5em;
+    margin-left: 12em;
+    /* margin-top: 1.5em; */
+    background-color: #fff;
+}
+.block{
+    border-radius: 10px;
+    height: 5.5em;
+    background-color: #de712e;
+    width: 12em;
+}
+.stack{
+    width: 100%;
+    height: 82%;
+    background-color: #2e2ede;
+}
+.stackblock{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    width: 12em;
+    height: 35em;
+    background-color: #fff;
 }
 .table2{
-    width: 25%;
+    width: 30%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
