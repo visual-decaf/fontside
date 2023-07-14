@@ -1,62 +1,119 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Vue Example</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/myscript.js"></script>
-    
+  <title>Stack Demo</title>
+  <style>
+    .table1 {
+      display: flex;
+      justify-content: center;
+    }
+    .content {
+      display: flex;
+      width: 600px;
+    }
+    .list, .stack {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .listblock, .stackblock {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .block {
+      width: 50px;
+      height: 50px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      user-select: none;
+    }
+    .first {
+      background-color: lightblue;
+    }
+    .f {
+      background-color: pink;
+    }
+  </style>
 </head>
 <body>
-    <div id="app">
-        <div class="logo">
-            <img src="../frontside/img/logo.svg" alt="SVG Image" >
-            <h4>visual decaf</h4>
+  <div class="table1" id="table1">
+    <div class="content">
+      <div class="list">
+        <div class="listblock">
+          <div class="block first">1</div>
+          <div class="block">2</div>
+          <div class="block">3</div>
         </div>
-        <div class="about">
-            <h5>scanner</h5>
-            <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
-                展示将输入的字符串转化为可视化的token流</p>
+      </div>
+      <div class="stack">
+        <div class="stackblock">
+          <div class="block f">4</div>
+          <div class="block">5</div>
+          <div class="block">6</div>
         </div>
-        <div class="container">
-            <input type="text" class="textbox first" v-model="text">
-            <input type="text" class="textbox second" v-model="textDisplay">
-        </div>
-        <div class="btn">
-            <button v-bind:style="{ backgroundColor: buttonColor }" v-bind:disabled="isButtonDisabled" v-on:click="navigateToMain2">下一步</button>
-        </div>
+      </div>
     </div>
+  </div>
+  <script>
+    var table1 = document.getElementById('table1');
+    var blockFirst = document.querySelector('.first');
+    var blockF = document.querySelector('.f');
+    var stackBlock = document.querySelector('.stackblock');
 
-    <script>
-        var app = Vue.createApp({
-            data() {
-                return {
-                    text: '',
-                    textDisplay: ''
-                }
-            },
-            computed: {
-                buttonColor() {
-                    return this.text !== '' ? 'blue' : 'gray';
-                },
-                isButtonDisabled() {
-                    return this.text === '';
-                }
-            },
-            methods: {
-                navigateToMain2() {
-                    if (this.text !== '') {
-                        window.location.href = 'main2.html';
-                    }
-                }
-            },
-            watch: {
-                text(newValue) {
-                    this.textDisplay = newValue;
-                }
-            }
-        }).mount('#app');
-    </script>
+    blockFirst.addEventListener('mousedown', function(event) {
+      event.preventDefault();  // 防止拖拽时选中文本
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+
+    function onMouseMove(event) {
+      var tableBounds = table1.getBoundingClientRect();
+      var stackBlockBounds = stackBlock.getBoundingClientRect();
+
+      var x = event.clientX - tableBounds.left;
+      var y = event.clientY - tableBounds.top;
+
+      blockFirst.style.position = 'absolute';
+      blockFirst.style.left = x + 'px';
+      blockFirst.style.top = y + 'px';
+
+      if (isOverlap(blockFirst, blockF)) {
+        blockF.style.borderTop = '2px solid red';
+      } else {
+        blockF.style.borderTop = 'none';
+      }
+    }
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      if (isOverlap(blockFirst, blockF)) {
+        var index = Array.from(stackBlock.children).indexOf(blockF);
+        stackBlock.insertBefore(blockFirst, blockF);
+      }
+
+      blockFirst.style.position = '';
+      blockFirst.style.left = '';
+      blockFirst.style.top = '';
+      blockF.style.borderTop = 'none';
+    }
+
+    function isOverlap(el1, el2) {
+      var bounds1 = el1.getBoundingClientRect();
+      var bounds2 = el2.getBoundingClientRect();
+      return (bounds1.left + bounds1.width >= bounds2.left) &&
+             (bounds1.left <= bounds2.left + bounds2.width) &&
+             (bounds1.top + bounds1.height >= bounds2.top) &&
+             (bounds1.top <= bounds2.top + bounds2.height);
+    }
+  </script>
 </body>
 </html>
