@@ -3,10 +3,21 @@
 	padding:0;
 }
 .head{
-    width: 61%;
-    height: 40px;
-
+    width: 100%;
+    height: 60px;
+    background-color: #2f4056!important;
     margin: 0%;
+}
+.layui-nav {
+    position: relative;
+    padding: 0 15px;
+    background-color: #2f363c;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 0;
+    box-sizing: border-box;
+    margin-left: 48%;
+    font-weight: 700;
 }
 body{
     height: auto; /* 修改为自动高度 */
@@ -14,14 +25,15 @@ body{
     overflow-x: hidden;
     display:flex;
     font-size:30px;
-    /* font-family: 'Signika', cursive; */
-    font-weight: 700;
+    font-family: 'Signika', cursive;
+    font-weight: 800;
     color:#fff;
     /* background: linear-gradient(to bottom, #f5f5dc 0%, #fffaf0 100%); */
     background-color: #f5f5dc;
     /* background-size:400%; */
     /* animation: bgmove 20s infinite; */
     flex-direction: column;
+    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; */
 }
 .logo{
     display: flex;
@@ -34,7 +46,11 @@ body{
     height:30px;
 }
 .logo h4{
-    margin: revert;
+    font-weight: 700;
+    font-size: 20px;
+    width: 12vw;
+    color: #fff;
+    margin-top: 15px
 }
 .topcontainer{
   width: 100%;
@@ -48,6 +64,7 @@ body{
   display: flex;
   flex-direction: row;
   margin-top:5px
+ 
 }
 .container1{
     display: flex;
@@ -59,6 +76,7 @@ body{
     border: 3px solid #ccc;
     border-radius: 10px;
     margin: 5px;
+    font-weight: 700;
 }
 .container3{
     display: flex;
@@ -70,6 +88,7 @@ body{
     border: 3px solid #ccc;
     border-radius: 10px;
     margin: 5px;
+    font-weight: 700;
 }
 .container2{
     display: flex;
@@ -87,7 +106,7 @@ body{
     flex-direction: column;
     position: relative;
     font-size: 30px;
-    width: 29%;
+    width: 25%;
     height: 30rem;
     border: 3px solid #ccc;
     border-radius: 10px;
@@ -95,19 +114,21 @@ body{
 }
 .container5{
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     position: relative;
     font-size: 30px;
-    width: 70%;
+    width: 74%;
     height: 30rem;
     border: 3px solid #ccc;
     border-radius: 10px;
     margin: 5px;
 }
+
 .about{
     width: 100%;
     margin:2px 3px;
     height: 15%;
+    font-weight: 700;
 }
 .about h5{
 	width:90vw;
@@ -145,7 +166,9 @@ body{
     background-color: #ccc;
     color: #fff;
     cursor: pointer;
+    font-weight: 700;
 }
+
 #myButton2 {
     position: absolute;
     bottom: 1vh;
@@ -161,6 +184,7 @@ body{
     background-color: #ccc;
     color: #fff;
     cursor: pointer;
+    font-weight: 700;
 }
 #myButton3 {
     position: absolute;
@@ -177,6 +201,7 @@ body{
     background-color: #ccc;
     color: #fff;
     cursor: pointer;
+    font-weight: 700;
 }
 #myButton4 {
     position: absolute;
@@ -193,6 +218,7 @@ body{
     background-color: #ccc;
     color: #fff;
     cursor: pointer;
+    font-weight: 700;
 }
 #myButton5 {
     position: absolute;
@@ -209,22 +235,23 @@ body{
     background-color: #ccc;
     color: #fff;
     cursor: pointer;
+    font-weight: 700;
 }
 #editor{
     width: 95%;
     height: 72%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 6px;
+    margin: 7px;
     opacity: 0.7;
     font-size: 7px;
 }
 #editor1{
-    width: 50%;
+    width: 45%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
@@ -248,47 +275,94 @@ body{
 }
 .bytecode{
     width: 95%;
-    height: 70%;
+    height: 74%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
 .table{
     width: 100%;
-    height: 70%;
+    height: 74%;
     display: flex;
 }
 .table1{
-    width: 25%;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
+    overflow-x: auto;
+    overflow-y: auto;
+    /* overflow: hidden; */
+    
+}
+.table1 .content {
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+  }
+/* .table1 .listblock,
+.table1 .stackblock {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+} */
+.list{
+    width: 100%;
+    height: 18%;
+    background-color: #2ede98;
+}
+.listblock{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    width: 60em;
+    height: 5.5em;
+    margin-left: 12em;
+    /* margin-top: 1.5em; */
+    background-color: #fff;
+}
+.block{
+    border-radius: 10px;
+    height: 5.5em;
+    width: 12em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    opacity: 0.5;
+}
+.stack{
+    width: 100%;
+    height: 82%;
+    background-color: #2e2ede;
+}
+.stackblock{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    width: 12em;
+    height: 35em;
+    background-color: #fff;
 }
 .table2{
-    width: 25%;
+    width: 30%;
     height: 100%;
     border: 3px solid #ccc;
     border-radius: 10px;
-    margin: 8px;
+    margin: 3px;
     opacity: 0.7;
     font-size: 7px;
 }
-.layui-nav {
-    position: relative;
-    display: flex;
-    padding: 0 15px;
-    background-color: #2f363c;
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0;
-    box-sizing: border-box;
-}
-/* 以下是侧边栏 */
+
+/* 以下是 */
 @import url("https://fonts.googleapis.com/css?family=Signika");
 
 *,
@@ -326,7 +400,6 @@ a {
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin-top: 0.3%;
 }
 
 #check+label::before {
@@ -358,7 +431,7 @@ a {
 }
 
 #check:checked+label::before {
-    left: calc(26.5vw - 1em);
+    left: calc(25.6vw - 1em);
     transform: scale(1);
     visibility: visible;
     opacity: 1;
@@ -401,6 +474,8 @@ aside {
     justify-content: space-between;
     background-image: linear-gradient(45deg, #3369e7, #2ede98);
     transform: translateX(-100%);
+    font-weight: 700;
+    font-size: larger;
 }
 .top{
     margin-top: 10rem;
@@ -417,3 +492,4 @@ article {
     width: 100%;
     background-color: #f5f5dc;
 }
+

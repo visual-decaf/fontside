@@ -7,11 +7,12 @@
     <title>visual decaf</title>
     <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./node_modules/animejs/lib/anime.js"></script>
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
-   <link rel="stylesheet" href="css/style5.css">
+   <link rel="stylesheet" href="css/test.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
     <style>
-       
+
     </style>
 </head>
 
@@ -105,23 +106,32 @@
                 </div>
                 <textarea class="bytecode" id = "byte_code"></textarea>
                 <div class="btn">
-                    <button id="myButton4" disabled>生成语法树</button>
+                    <button id="myButton4" disabled>生成bytecode</button>
                 </div>
             </div>
             <div class="container5">
                 <div class="about">
-                    <h5>scanner</h5>
-                    <p> sacnner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
-                        展示将输入的字符串转化为可视化的token流</p>
+                    <h5>堆栈，编辑器，符号表</h5>
+                    <p> 动态堆栈展示  编辑器跳转  符号表</p>
                 </div>
                 <div class="table"> 
-                  <div class="table1"></div>
+                  <div class="table1" id="table1">
+                    <div class="content">
+                    <div class="list">
+                        <div class="listblock" id="listblock"></div>
+                    </div>
+                    <div class="stack">
+                        <div class="stackblock" id="stackblock"></div>
+                    </div>
+                  </div>
+                  </div>
+
                   <div id="editor1"></div>
                   <div class="table2"></div>
                 </div>
                 
                 <div class="btn">
-                    <button id="myButton5" disabled>提交</button>
+                    <button id="myButton5" disabled>下一步</button>
                 </div>
             </div>
         </div>
@@ -130,8 +140,7 @@
 
 
     <script>
-
-    //Initialized var for syntax tree
+       //Initialized var for syntax tree
     var nodelist = [];
     var edgelist = [];
     var count=1;
@@ -150,14 +159,14 @@
                 buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
             if(subtree.hasOwnProperty("right"))
                 buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
-        }
-      
+     }
+        //   渲染编辑器
         var editor = ace.edit("editor", {
         theme: "ace/theme/monokai",
         mode: "ace/mode/javascript",
         autoScrollEditorIntoView: true,
         });
-        editor.setValue("function foo(items) {var x = ");
+        // editor.setValue("function foo(items) {var x = ");
         var myButton = document.getElementById("myButton");
         editor.session.on("change", function () {
         if (editor.getValue().trim().length > 0) {
@@ -168,7 +177,7 @@
             myButton.disabled = true;
         }
         });
-      var scanner = document.querySelector("textarea.scanner");
+        var scanner = document.querySelector("textarea.scanner");
 
     //    editor.session.on("change", function() {
     //     scanner.value = editor.getValue();
@@ -177,6 +186,7 @@
        scanner.addEventListener("input", function() {
            editor.setValue(scanner.value);
        });
+
        // 对myButton1点击事件的响应
        myButton.addEventListener("click", function() {
        if (!myButton.disabled) {
@@ -185,9 +195,32 @@
         myButton.style.backgroundColor = "";
         document.getElementById("myButton2").disabled = false;
         document.getElementById("myButton2").style.backgroundColor = "blue";
-      }
+        // 上传编辑器代码
+        var myHeaders = new Headers();
+         myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
+         
+         var formdata = new FormData();
+         formdata.append("code", editor.getValue());
+         
+         var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+         };
+       
+         fetch("http://test-cn.your-api-server.com/", requestOptions)
+           .then(response => {
+            console.log('Status code:', response.status);
+            return response.text();
+             })
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        }
        });
-      // 对myButton2点击事件的响应
+
+
+       // 对myButton2点击事件的响应
        document.getElementById("myButton2").addEventListener("click", function() {
        if (!document.getElementById("myButton2").disabled) {
         document.getElementById("myButton2").disabled = true;
@@ -244,26 +277,16 @@
       }
       });
 
-      //对myButton3点击事件的响应
+      // 对myButton3点击事件的响应
       document.getElementById("myButton3").addEventListener("click", function() {
        if (!document.getElementById("myButton3").disabled) {
         document.getElementById("myButton3").disabled = true;
         document.getElementById("myButton3").style.backgroundColor = "";
+        document.getElementById("myButton4").disabled = false;
+        document.getElementById("myButton4").style.backgroundColor = "blue";
 
-        let jsonStr = '{"operation":"DIVIDE","left":{"operation":"MULTIPLY","left":{"value":4},"right":{"value":3}},"right":{"value":5}}';
-        //URL-GET-REQUEST
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "http://test-cn.your-api-server.com/ast", false);
-        // xhr.onreadystatechange = function() {
-        // console.log(xhr.status);
-        // if (xhr.status == 200) {
-        // //json-interface
-        //     jsonStr =xhr.responseText;
-        // }
-        // };
-        // xhr.send();
-        console.log(jsonStr);
-
+        //json-interface
+        let jsonStr = '{"operation":"DIVIDE","left":{"operation":"MULTIPLY","left":{"value":1},"right":{"value":2}},"right":{"value":3}}';
         buildtree(jsonStr,0,1);
         console.log(nodelist);
         console.log(edgelist);
@@ -285,13 +308,49 @@
         nodelist = [];
         edgelist = [];
         count=1;
-        document.getElementById("myButton4").disabled = false;
-        document.getElementById("myButton4").style.backgroundColor = "blue";
+        //document.getElementById("myButton4").disabled = false;
+        //document.getElementById("myButton4").style.backgroundColor = "blue";
       }
       });
+     var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
 
-        // 对myButton4点击事件的响应
-        document.getElementById("myButton4").addEventListener("click", function() {
+//      var table1 = document.querySelector('.table1');
+// var ctrlDown = false;
+// var scale = 1;
+
+// document.addEventListener('keydown', function(event) {
+//   if (event.key === 'Control') {
+//     ctrlDown = true;
+//   }
+// });
+
+// document.addEventListener('keyup', function(event) {
+//   if (event.key === 'Control') {
+//     ctrlDown = false;
+//   }
+// });
+
+// table1.addEventListener('wheel', function(event) {
+//   if (ctrlDown) {
+//     event.preventDefault();
+//     var delta = event.deltaY;
+//     scale = Math.min(Math.max(scale + delta * 0.001, 0.1), 10);
+//     var listblocks = table1.querySelectorAll('.listblock');
+//     var stackblocks = table1.querySelectorAll('.stackblock');
+//     for (var i = 0; i < listblocks.length; i++) {
+//       listblocks[i].style.transform = 'scale(' + scale + ')';
+//     }
+//     for (var i = 0; i < stackblocks.length; i++) {
+//       stackblocks[i].style.transform = 'scale(' + scale + ')';
+//     }
+//   }
+// });
+  // 对myButton4点击事件的响应
+  document.getElementById("myButton4").addEventListener("click", function() {
         if (!document.getElementById("myButton4").disabled) {
         document.getElementById("myButton4").disabled = true;
         document.getElementById("myButton4").style.backgroundColor = "";
@@ -343,12 +402,175 @@
         
       }
       });
+  // 对myButton5点击事件的响应
+  document.getElementById("myButton5").addEventListener("click", function() {
+        // if (!document.getElementById("myButton5").disabled) {
+        // document.getElementById("myButton5").disabled = true;
+        // document.getElementById("myButton5").style.backgroundColor = "";
+        // };
+        nextStep();
+    })
 
-     var editor1 = ace.edit("editor1", {
-     theme: "ace/theme/tomorrow_night_blue",
-     mode: "ace/mode/javascript",
-     autoScrollEditorIntoView: true,
-     });
+var table = document.getElementById("table1");
+var content = table.querySelector(".content");
+var scale = 1;
+
+//堆栈动画部分
+    //queue从接口接收数据
+    var queue=[1,2,'+',3];
+    queue.forEach(function(token, index) {
+        var newItem = document.createElement('div');
+        newItem.classList.add('block');
+        newItem.textContent=token;
+        var queue_container=document.getElementById('listblock');
+        newItem.style.backgroundColor = getRandomColor();
+        queue_container.appendChild(newItem);
+        console.log("ggbang");
+    });
+    var stackContainer = document.getElementById('stackblock');
+    var queueContainer = document.getElementById('listblock');
+    function pushstackItem(){
+        var item = Math.floor(Math.random()*100);
+        stack.push(item);
+        var newItem = document.createElement('div');
+        
+        newItem.classList.add('block');
+        newItem.textContent=item;
+        newItem.style.backgroundColor = getRandomColor();
+         // 设置新的堆栈项元素的初始状态
+        newItem.style.opacity = 0;
+        newItem.style.transform = 'translateY(-100px)';
+
+        // 添加新的堆栈项元素到堆栈容器之前隐藏它
+        newItem.style.display = 'none';
+        stackContainer.appendChild(newItem);
+        // stackContainer.insertBefore(newItem, stackContainer.firstChild);
+
+        newItem.style.display = 'block';
+        anime({
+            targets: newItem,
+            translateY: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+            opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+            duration: 500,  // 动画持续时间为 0.5 秒
+            easing: 'easeOutExpo'  // 使用缓动函数控制动画速度
+        });
+    }
+
+    function popstackItem(){
+        // if(stack.length === 0){
+        //     return;
+        // }
+        // var poppedItem = stack.pop();
+        //document.getElementById("myButton5").style.backgroundColor = "";
+        document.getElementById("myButton5").disabled = true;
+        var lastItem = stackContainer.lastElementChild;
+        // console.log(lastItem);
+
+        anime({
+            targets: lastItem,
+            translateY: [0,-100],
+            opacity:[1,0],
+            duration:500,
+            easing:'easeOutExpo',
+            complete:function(){
+                console.log("deleted susccess");
+                stackContainer.removeChild(lastItem);
+                document.getElementById("myButton5").disabled = false;
+                //document.getElementById("myButton5").style.backgroundColor = "blue";
+            }
+        })
+    }
+
+    function pushExistedItem(){
+        if(!queueContainer.hasChildNodes()){
+            return;
+        }
+        console.log("here");
+        document.getElementById("myButton5").disabled =true;
+        var firstItem = queueContainer.firstElementChild;
+        stackContainer.appendChild(firstItem);
+        var translateDirection='translateY';
+            anime({
+            targets: firstItem,
+            [translateDirection]: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+            opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+            duration: 500,  // 动画持续时间为 0.5 秒
+            easing: 'easeOutExpo',  // 使用缓动函数控制动画速度
+            complete:function(){
+                document.getElementById("myButton5").disabled = false;
+            }
+        });
+    }
+
+
+    function popqueueItem(){
+        var firstItem = queueContainer.firstElementChild;
+
+        anime({
+            targets: firstItem,
+            translateX: [0,-100],
+            opacity:[1,0],
+            duration:500,
+            easing:'easeOutExpo',
+            complete:function(){
+                console.log("deleted susccess");
+                queueContainer.removeChild(firstItem);
+            }
+        })
+    }
+
+    function nextStep(){
+        if(!queueContainer.hasChildNodes()){
+            document.getElementById("myButton5").disabled =true;
+            document.getElementById("myButton5").style.backgroundColor = "";
+            return;
+        }
+        if(queueContainer.firstElementChild.textContent === '+') add_operation();
+        else {
+            document.getElementById("myButton5").style.backgroundColor = "";
+            pushExistedItem();
+            setTimeout(function(){
+                document.getElementById("myButton5").style.backgroundColor = "blue";
+            },550);
+        }
+
+    }
+
+    function add_operation(){
+        document.getElementById("myButton5").style.backgroundColor = "";
+        document.getElementById('myButton5').disabled=true;
+        popstackItem();
+        setTimeout(function(){
+            popstackItem(); 
+            setTimeout(function(){
+                popqueueItem();
+                setTimeout(function(){
+                    pushExistedItem();
+                    document.getElementById("myButton5").style.backgroundColor = "blue";
+                    document.getElementById('myButton5').disabled=false;
+                },550);
+            },550);
+        },550);
+
+    }
+    // 生成随机颜色函数
+    function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+     }
+    return color;
+    }
+
+table.addEventListener("wheel", function(e) {
+  if (e.ctrlKey) {
+    e.preventDefault();
+    var delta = Math.sign(e.deltaY);
+    scale = Math.max(0.1, scale + delta * 0.1);
+    content.style.transform = "scale(" + scale + ")";
+  }
+});
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
