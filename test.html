@@ -45,7 +45,31 @@
       if (item) {
         stackDiv.removeChild(item);
       }
+<<<<<<< Updated upstream
     });
   </script>
+=======
+       });
+      // 对myButton2点击事件的响应
+       document.getElementById("myButton2").addEventListener("click", function() {
+       if (!document.getElementById("myButton2").disabled) {
+        document.getElementById("myButton2").disabled = true;
+        document.getElementById("myButton2").style.backgroundColor = "";
+        document.getElementById("myButton3").disabled = false;
+        document.getElementById("myButton3").style.backgroundColor = "blue";
+      }
+      });
+     var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
+
+     
+     </script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->
+<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
