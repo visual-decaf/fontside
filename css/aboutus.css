@@ -1,0 +1,222 @@
+*{
+	margin: 0;
+	padding:0;
+}
+.head{
+    width: 100%;
+    height: 60px;
+    background-color: #2f4056!important;
+    margin: 0%;
+}
+.layui-nav {
+    position: relative;
+    padding: 0 15px;
+    background-color: #2f363c;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 0;
+    box-sizing: border-box;
+    margin-left: 48%;
+    font-weight: 700;
+}
+body{
+    height: auto; /* 修改为自动高度 */
+    overflow-y: scroll; /* 启用竖直方向的滚动条 */
+    overflow-x: hidden;
+    display:flex;
+    font-size:30px;
+    font-family: 'Signika', cursive;
+    font-weight: 800;
+    color:#fff;
+    /* background: linear-gradient(to bottom, #f5f5dc 0%, #fffaf0 100%); */
+    background-color: #f5f5dc;
+    /* background-size:400%; */
+    /* animation: bgmove 20s infinite; */
+    flex-direction: column;
+    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; */
+}
+.logo{
+    display: flex;
+    position: relative;
+    margin: 0 0 0 5vw;
+}
+.logo img{
+    margin:10px 20px 0 0;
+    width:30px;
+    height:30px;
+}
+.logo h4{
+    font-weight: 700;
+    font-size: 20px;
+    width: 12vw;
+    color: #fff;
+    margin-top: 15px
+}
+
+#carousel {
+    position: relative;
+    width: 100%;
+    height: 20rem;
+    overflow: hidden;
+  }
+  
+  #carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  #carousel img.active {
+    opacity: 1;
+  }
+  
+  #prev,
+  #next {
+      border: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 5rem;
+    background-color: #fff;
+    color: #000;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  #prev {
+    left: 10px;
+    opacity: 0.4;
+  }
+  
+  #next {
+    right: 10px;
+    opacity: 0.4;
+  }
+
+
+/* 以下是侧边栏 */
+@import url("https://fonts.googleapis.com/css?family=Signika");
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+
+a {
+    text-decoration: none;
+    color: #3369e7;
+}
+
+#check {
+    display: none;
+}
+
+#check+label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#check+label::before {
+    position: absolute;
+    content: '';
+    top: -1em;
+    left: -1em;
+    width: 102vw;
+    height: 104vh;
+    background-color: rgba(33, 33, 61, 0.5);
+    transform-origin: 50% 50%;
+    transform: scale(1.3);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 250ms linear;
+}
+
+#check+label svg {
+    margin-right: 0.5em;
+}
+
+#check+label svg path {
+    transform-origin: 35% 50%;
+    transition: transform 166.6666666667ms cubic-bezier(0.06, 0.63, 0.91, 0.66);
+}
+
+#check:checked+label~aside {
+    transform: none;
+}
+
+#check:checked+label::before {
+    left: calc(25.6vw - 1em);
+    transform: scale(1);
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 576px) {
+    #check:checked+label::before {
+        left: calc(50vw - 1em);
+    }
+}
+
+#check:checked+label svg #one {
+    transform: rotate(45deg);
+}
+
+#check:checked+label svg #two {
+    transform: rotate(-45deg);
+}
+
+#check:checked+label~article {
+    z-index: -1;
+    transform: translateX(25vw) scale(0.7);
+    border-radius: 0.25em;
+    user-select: none;
+    pointer-events: none;
+}
+
+aside,
+article {
+    padding: 0;
+    transition: all 250ms cubic-bezier(0.06, 0.63, 0.91, 0.66);
+}
+
+aside {
+    position: absolute;
+    width: 25vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image: linear-gradient(45deg, #3369e7, #2ede98);
+    transform: translateX(-100%);
+    font-weight: 700;
+    font-size: larger;
+}
+.top{
+    margin-top: 10rem;
+}
+@media (max-width: 576px) {
+    aside {
+        width: 50vw;
+    }
+}
+
+article {
+    position: relative;
+    transform-origin: 10% 50%;
+    width: 100%;
+    background-color: #f5f5dc;
+}
+
