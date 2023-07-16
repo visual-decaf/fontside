@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login</title>
-	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         * {
             margin: 0;
@@ -15,10 +14,29 @@
         }
         body {
             height: 100%;
+            
         }
         .container {
             height: 100%;
-            background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            /* background-image: linear-gradient(to right, #fbc2eb, #a6c1ee); */
+            background-image: linear-gradient(
+        125deg,#2c3e50,#27ae60,
+        #2980b9,#e74c3c,#8e44ad
+         );
+            background-size:400%;
+            animation: bgmove 20s infinite;
+            flex-direction: column;
+            }
+        @keyframes bgmove{
+            0%{
+                background-position:0% 50% ;
+            }
+            50%{
+                background-position:100% 50% ;
+            }
+            100%{
+                background-position:0% 50% ;
+    }
         }
         .login-wrapper {
             background-color: #fff;
@@ -55,7 +73,7 @@
             padding: 10px;
             width: 100%;
             margin-top: 40px;
-            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            background-image: linear-gradient(to right, #2f4056, #27ae60);
             color: #fff;
         }
         .msg {
@@ -66,6 +84,9 @@
             text-decoration-line: none;
             color: #abc1ee;
         }
+        .btn:disabled {
+     background-color: #ccc;
+      }
     </style>
 </head>
 <body>
@@ -73,9 +94,9 @@
         <div class="login-wrapper">
             <div class="header">Login</div>
             <div class="form-wrapper">
-                <input type="text" name="username" placeholder="username" class="input-item">
-                <input type="password" name="password" placeholder="password" class="input-item">
-                <div class="btn" @click="react">Login</div>
+                <input type="text" name="username" placeholder="username" id="username" class="input-item">
+                <input type="password" name="password" placeholder="password" id="password" class="input-item">
+                <button class="btn" id="login-btn" onclick="login()" disabled >Login</button>
             </div>
             <div class="msg">
                 Don't have account?
@@ -84,15 +105,26 @@
         </div>
     </div>
 	<script>
-        const app = Vue.createApp({
-            methods: {
-                react() {
-                    window.location.href = "main3.html";
-                }
-            }
-        });
+         const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.getElementById('login-btn');
 
-        app.mount('#app');
+usernameInput.addEventListener('input', handleInput);
+passwordInput.addEventListener('input', handleInput);
+
+function handleInput() {
+  if (usernameInput.value === 'admin' && passwordInput.value === '123456') {
+    loginBtn.disabled = false;
+  } else {
+    loginBtn.disabled = true;
+  }
+}
+
+function login() {
+  if (!loginBtn.disabled) {
+    window.location.href = 'loading.html';
+  }
+}
     </script>
 </body>
 </html>
