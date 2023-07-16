@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login</title>
+    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -70,11 +71,11 @@
         }
         .btn {
             text-align: center;
-            padding: 10px;
+            /* padding: 10px; */
             width: 100%;
             margin-top: 40px;
-            background-image: linear-gradient(to right, #2f4056, #27ae60);
-            color: #fff;
+            /* background-image: linear-gradient(to right, #2f4056, #27ae60);
+            color: #fff; */
         }
         .msg {
             text-align: center;
@@ -96,7 +97,8 @@
             <div class="form-wrapper">
                 <input type="text" name="username" placeholder="username" id="username" class="input-item">
                 <input type="password" name="password" placeholder="password" id="password" class="input-item">
-                <button class="btn" id="login-btn" onclick="login()" disabled >Login</button>
+                
+                <button type="button" class="layui-btn layui-btn-disabled btn"id="login-btn" onclick="login()">Login</button>
             </div>
             <div class="msg">
                 Don't have account?
@@ -105,26 +107,50 @@
         </div>
     </div>
 	<script>
-         const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const loginBtn = document.getElementById('login-btn');
+//          const usernameInput = document.getElementById('username');
+// const passwordInput = document.getElementById('password');
+// const loginBtn = document.getElementById('login-btn');
 
-usernameInput.addEventListener('input', handleInput);
-passwordInput.addEventListener('input', handleInput);
+// usernameInput.addEventListener('input', handleInput);
+// passwordInput.addEventListener('input', handleInput);
 
-function handleInput() {
-  if (usernameInput.value === 'admin' && passwordInput.value === '123456') {
-    loginBtn.disabled = false;
-  } else {
-    loginBtn.disabled = true;
-  }
-}
+// function handleInput() {
+//   if (usernameInput.value === 'admin' && passwordInput.value === '123456') {
+//     loginBtn.disabled = false;
+//   } else {
+//     loginBtn.disabled = true;
+//   }
+// }
 
-function login() {
-  if (!loginBtn.disabled) {
-    window.location.href = 'loading.html';
-  }
-}
+// function login() {
+//   if (!loginBtn.disabled) {
+//     window.location.href = 'loading.html';
+//   }
+// }
+
+const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+
+    function updateLoginBtnStatus() {
+      if (usernameInput.value && passwordInput.value) { // 检查输入框是否为空
+        loginBtn.classList.remove("layui-btn-disabled"); // 去掉按钮的 disabled 样式
+      } else {
+        loginBtn.classList.add("layui-btn-disabled"); // 添加按钮的 disabled 样式
+      }
+    }
+
+    usernameInput.addEventListener("input", updateLoginBtnStatus);
+    passwordInput.addEventListener("input", updateLoginBtnStatus);
+
+    loginBtn.onclick = function() {
+      if (usernameInput.value === "admin" && passwordInput.value === "123456") { // 检查用户名和密码是否正确
+        location.href = "loading.html"; // 跳转至 loading.html 页面
+      }
+    }
     </script>
+    <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
 </html>
+
+<!-- <button class="btn" id="login-btn" onclick="login()" disabled >Login</button> -->
