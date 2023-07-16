@@ -7,6 +7,7 @@
     <title>visual decaf</title>
     <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./node_modules/animejs/lib/anime.js"></script>
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
    <link rel="stylesheet" href="css/style5.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
@@ -73,7 +74,7 @@
                 </div>
                 <div id="editor"></div>
                 <div class="btn">
-                    <button id="myButton" disabled>提交</button>
+                    <button  id="myButton" disabled>提交</button>
                 </div>
             </div>
     
@@ -120,23 +121,10 @@
                   <div class="table1" id="table1">
                     <div class="content">
                     <div class="list">
-                        <div class="listblock">
-                            <div class="block first"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                        </div>
+                        <div class="listblock" id="listblock"></div>
                     </div>
-                    <div class="stack">
-                        <div class="stackblock">
-                            <div class="block f"></div>
-                            <div class="block"></div>
-                            <div class="block"></div>
-                        </div>
+                    <div class="stack" >
+                        <div class="stackblock" id="stackblock"></div>
                     </div>
                   </div>
                   </div>
@@ -424,11 +412,18 @@
 
     //   控制缩放窗口
       const blocks = document.querySelectorAll('.block');
-     blocks.forEach(block => {
-       const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-       block.style.backgroundColor = '#' + randomColor;
-     });
-
+    //  blocks.forEach(block => {
+    //    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    //    block.style.backgroundColor = '#' + randomColor;
+    //  });
+  // 对myButton5点击事件的响应
+  document.getElementById("myButton5").addEventListener("click", function() {
+        // if (!document.getElementById("myButton5").disabled) {
+        // document.getElementById("myButton5").disabled = true;
+        // document.getElementById("myButton5").style.backgroundColor = "";
+        // };
+        nextStep();
+    })
     var table = document.getElementById("table1");
     var content = table.querySelector(".content");
     var scale = 1;
@@ -451,36 +446,184 @@
     // });
 
     //  入栈操作
-    const nextButton = document.querySelector('#myButton5');
-    const listBlock = document.querySelector('.listblock');
-    const stackBlock = document.querySelector('.stackblock');
+//     const nextButton = document.querySelector('#myButton5');
+//     const listBlock = document.querySelector('.listblock');
+//     const stackBlock = document.querySelector('.stackblock');
     
-    // nextButton.addEventListener('click', () => {
-    //   const nextBlock = listBlock.querySelector('.block');
-    //   if (nextBlock) {
-    //     stackBlock.appendChild(nextBlock);
-    //   }
-    // });
-    nextButton.addEventListener('click', () => {
-  const nextBlock = listBlock.querySelector('.block');
-  if (nextBlock) {
-    stackBlock.appendChild(nextBlock);
-    // if (stackBlock.scrollHeight >40 *16) { // 5.5rem = 5.5 * 16px (assuming font-size: 16px)
-    //   stackBlock.style.height = `${stackBlock.scrollHeight + 5.5 * 16}px`;
-    // }
-    if (stackBlock.children.length >= 7) {
-        stackBlock.style.height = `${stackBlock.children.length * 5.5}em`;
-    }
-   }
-  });
+//     // nextButton.addEventListener('click', () => {
+//     //   const nextBlock = listBlock.querySelector('.block');
+//     //   if (nextBlock) {
+//     //     stackBlock.appendChild(nextBlock);
+//     //   }
+//     // });
+//     nextButton.addEventListener('click', () => {
+//   const nextBlock = listBlock.querySelector('.block');
+//   if (nextBlock) {
+//     stackBlock.appendChild(nextBlock);
+//     // if (stackBlock.scrollHeight >40 *16) { // 5.5rem = 5.5 * 16px (assuming font-size: 16px)
+//     //   stackBlock.style.height = `${stackBlock.scrollHeight + 5.5 * 16}px`;
+//     // }
+//     if (stackBlock.children.length >= 7) {
+//         stackBlock.style.height = `${stackBlock.children.length * 5.5}em`;
+//     }
+//    }
+//   });
 
-  //  出栈操作
-  const deleteButton = document.querySelector('#myButton6');
-   deleteButton.addEventListener('click', () => {
-     if (stackBlock.children.length > 0) {
-       stackBlock.removeChild(stackBlock.lastElementChild);
+//   //  出栈操作
+//   const deleteButton = document.querySelector('#myButton6');
+//    deleteButton.addEventListener('click', () => {
+//      if (stackBlock.children.length > 0) {
+//        stackBlock.removeChild(stackBlock.lastElementChild);
+//      }
+//    });
+
+   //堆栈动画部分
+    //queue从接口接收数据
+    var queue=[1,2,'+',3];
+    queue.forEach(function(token, index) {
+        var newItem = document.createElement('div');
+        newItem.classList.add('block');
+        newItem.textContent=token;
+        var queue_container=document.getElementById('listblock');
+        newItem.style.backgroundColor = getRandomColor();
+        queue_container.appendChild(newItem);
+        console.log("ggbang");
+    });
+    var stackContainer = document.getElementById('stackblock');
+    var queueContainer = document.getElementById('listblock');
+    function pushstackItem(){
+        var item = Math.floor(Math.random()*100);
+        stack.push(item);
+        var newItem = document.createElement('div');
+        
+        newItem.classList.add('block');
+        newItem.textContent=item;
+        newItem.style.backgroundColor = getRandomColor();
+         // 设置新的堆栈项元素的初始状态
+        newItem.style.opacity = 0;
+        newItem.style.transform = 'translateY(-100px)';
+
+        // 添加新的堆栈项元素到堆栈容器之前隐藏它
+        newItem.style.display = 'none';
+        stackContainer.appendChild(newItem);
+        // stackContainer.insertBefore(newItem, stackContainer.firstChild);
+
+        newItem.style.display = 'block';
+        anime({
+            targets: newItem,
+            translateY: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+            opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+            duration: 500,  // 动画持续时间为 0.5 秒
+            easing: 'easeOutExpo'  // 使用缓动函数控制动画速度
+        });
+    }
+
+    function popstackItem(){
+        // if(stack.length === 0){
+        //     return;
+        // }
+        // var poppedItem = stack.pop();
+        //document.getElementById("myButton5").style.backgroundColor = "";
+        document.getElementById("myButton5").disabled = true;
+        var lastItem = stackContainer.lastElementChild;
+        // console.log(lastItem);
+
+        anime({
+            targets: lastItem,
+            translateY: [0,-100],
+            opacity:[1,0],
+            duration:500,
+            easing:'easeOutExpo',
+            complete:function(){
+                console.log("deleted susccess");
+                stackContainer.removeChild(lastItem);
+                document.getElementById("myButton5").disabled = false;
+                //document.getElementById("myButton5").style.backgroundColor = "blue";
+            }
+        })
+    }
+
+    function pushExistedItem(){
+        if(!queueContainer.hasChildNodes()){
+            return;
+        }
+        console.log("here");
+        document.getElementById("myButton5").disabled =true;
+        var firstItem = queueContainer.firstElementChild;
+        stackContainer.appendChild(firstItem);
+        var translateDirection='translateY';
+            anime({
+            targets: firstItem,
+            [translateDirection]: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+            opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+            duration: 500,  // 动画持续时间为 0.5 秒
+            easing: 'easeOutExpo',  // 使用缓动函数控制动画速度
+            complete:function(){
+                document.getElementById("myButton5").disabled = false;
+            }
+        });
+    }
+
+
+    function popqueueItem(){
+        var firstItem = queueContainer.firstElementChild;
+
+        anime({
+            targets: firstItem,
+            translateX: [0,-100],
+            opacity:[1,0],
+            duration:500,
+            easing:'easeOutExpo',
+            complete:function(){
+                console.log("deleted susccess");
+                queueContainer.removeChild(firstItem);
+            }
+        })
+    }
+
+    function nextStep(){
+        if(!queueContainer.hasChildNodes()){
+            document.getElementById("myButton5").disabled =true;
+            document.getElementById("myButton5").style.backgroundColor = "";
+            return;
+        }
+        if(queueContainer.firstElementChild.textContent === '+') add_operation();
+        else {
+            document.getElementById("myButton5").style.backgroundColor = "";
+            pushExistedItem();
+            setTimeout(function(){
+                document.getElementById("myButton5").style.backgroundColor = "blue";
+            },550);
+        }
+
+    }
+
+    function add_operation(){
+        document.getElementById("myButton5").style.backgroundColor = "";
+        document.getElementById('myButton5').disabled=true;
+        popstackItem();
+        setTimeout(function(){
+            popstackItem(); 
+            setTimeout(function(){
+                popqueueItem();
+                setTimeout(function(){
+                    pushExistedItem();
+                    document.getElementById("myButton5").style.backgroundColor = "blue";
+                    document.getElementById('myButton5').disabled=false;
+                },550);
+            },550);
+        },550);
+
+    }
+    // 生成随机颜色函数
+    function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
      }
-   });
+    return color;
+    }
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
