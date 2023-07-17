@@ -149,21 +149,40 @@
     var edgelist = [];
     var count=1;
     //buildtree function
+    // function buildtree(data,parentid,nodelevel){
+    //         let subtree = JSON.parse(data);
+    //         let currentid=count;
+    //         if(subtree.hasOwnProperty("operation"))
+    //             nodelist.push({id: count, label: subtree.operation, level: nodelevel});
+    //         if(subtree.hasOwnProperty("value"))
+    //             nodelist.push({id: count, label: subtree.value.toString(), level: nodelevel});
+    //         if(parentid!=0)
+    //             edgelist.push({from: parentid, to: count});
+    //         count++;
+    //         if(subtree.hasOwnProperty("left"))
+    //             buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
+    //         if(subtree.hasOwnProperty("right"))
+    //             buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
+    //  }
+    //buildtree function
     function buildtree(data,parentid,nodelevel){
-            let subtree = JSON.parse(data);
-            let currentid=count;
-            if(subtree.hasOwnProperty("operation"))
-                nodelist.push({id: count, label: subtree.operation, level: nodelevel});
-            if(subtree.hasOwnProperty("value"))
-                nodelist.push({id: count, label: subtree.value.toString(), level: nodelevel});
-            if(parentid!=0)
-                edgelist.push({from: parentid, to: count});
+        let currentid=count;
+        console.log(data);
+        if(!('list' in data)){
+            nodelist.push({id: count, label: data.value.toString(), level: nodelevel});
+            if(parentid!=0) edgelist.push({from: parentid, to: count});
             count++;
-            if(subtree.hasOwnProperty("left"))
-                buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
-            if(subtree.hasOwnProperty("right"))
-                buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
-     }
+        }
+        else{
+            nodelist.push({id: count, label: data.name, level: nodelevel});
+            if(parentid!=0) edgelist.push({from: parentid, to: count});
+            count++;
+            data.list.forEach(function(element,index){
+                buildtree(element, currentid, nodelevel+1);
+            })
+        }
+    }
+
         //   渲染编辑器
         var editor = ace.edit("editor", {
         theme: "ace/theme/monokai",
@@ -195,31 +214,26 @@
        myButton.addEventListener("click", function() {
        if (!myButton.disabled) {
         console.log(editor.getValue());
+        
+        //发送post请求
+        var data = new FormData();
+        data.append("code", editor.getValue());
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+        }
+        });
+        xhr.open("POST", "http://172.20.22.166:8080/code?id=1030958209");
+        xhr.send(data);
+
         myButton.disabled = true;
         myButton.style.backgroundColor = "";
         document.getElementById("myButton2").disabled = false;
         document.getElementById("myButton2").style.backgroundColor = "blue";
-        // 上传编辑器代码
-        var myHeaders = new Headers();
-         myHeaders.append("User-Agent", "Apifox/1.0.0 (https://apifox.com)");
-         
-         var formdata = new FormData();
-         formdata.append("code", editor.getValue());
-         
-         var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-         };
-       
-         fetch("http://test-cn.your-api-server.com/", requestOptions)
-           .then(response => {
-            console.log('Status code:', response.status);
-            return response.text();
-             })
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+
         }
        });
 
@@ -231,7 +245,6 @@
         document.getElementById("myButton2").style.backgroundColor = "";
         document.getElementById("myButton3").disabled = false;
         document.getElementById("myButton3").style.backgroundColor = "blue";
-
         let jsonStr = {
         "code": "1",
         "msg": "操作成功",
@@ -258,6 +271,22 @@
         }
         ]
         }
+        //发送请求获取json
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            jsonStr = this.responseText.result;
+        }
+        });
+        //xhr.setHeader("Access-Control-Allow-Origin", "http://172.20.22.166:8080");
+  // 允许发送包含凭据的请求
+        //xhr.setHeader("Access-Control-Allow-Credentials", "true");
+        xhr.open("GET", "http://172.20.22.166:8080/tokens?id=1030958209");
+        xhr.send();
+        
+
         //URL-GET-REQUEST
         // var xhr = new XMLHttpRequest();
         // xhr.open("GET", "http://test-cn.your-api-server.com/tokens", false);
@@ -291,8 +320,33 @@
         var syntaxtree = document.getElementsByClassName("syntaxtree")[0];
         syntaxtree.style.backgroundColor = "white";
         //json-interface
-        let jsonStr = '{"operation":"DIVIDE","left":{"operation":"MULTIPLY","left":{"value":1},"right":{"value":2}},"right":{"value":3}}';
-        buildtree(jsonStr,0,1);
+        let jsonStr = {
+    "code": "1",
+    "msg": "Success",
+    "result": {
+        "type": "PrintStmt",
+        "name": "PrintStmt",
+        "list": [
+            {
+                "type": "IntConstant",
+                "value": 1,
+                "resultType": "INT"
+            },
+            {
+                "type": "IntConstant",
+                "value": 2,
+                "resultType": "INT"
+            },
+            {
+                "type": "IntConstant",
+                "value": 3,
+                "resultType": "INT"
+            }
+        ],
+        "resultType": "VOID"
+    }
+}
+        buildtree(jsonStr.result,0,1);
         console.log(nodelist);
         console.log(edgelist);
         let nodes = new vis.DataSet(nodelist);
@@ -477,27 +531,102 @@
 //      }
 //    });
 
+
    //堆栈动画部分
     //queue从接口接收数据
-    var queue=[1,2,'+',3];
-    queue.forEach(function(token, index) {
-        var newItem = document.createElement('div');
-        newItem.classList.add('block');
-        newItem.textContent=token;
-        var queue_container=document.getElementById('listblock');
-        newItem.style.backgroundColor = getRandomColor();
-        queue_container.appendChild(newItem);
-        console.log("ggbang");
-    });
+    var debugJson={
+    "code": "1",
+    "msg": "Success",
+    "result": [
+        {
+            "steps": [
+                {
+                    "operation": "PUSH",
+                    "value": 1
+                },
+                {
+                    "operation": "PUSH",
+                    "value": 1
+                },
+                {
+                    "operation": "PUSH",
+                    "value": 1
+                },
+                {
+                    "operation": "POP",
+                    "item": null
+                },
+                {
+                    "operation": "POP",
+                    "item": null
+                },
+                {
+                    "operation": "PUSH",
+                    "value": 1
+                },
+                {
+                    "operation": "POP",
+                    "item": null
+                },
+                
+            ],
+            "table": [
+                {
+                    "index": 0,
+                    "value": {
+                        "type": "INT",
+                        "value": 1
+                    }
+                },
+                {
+                    "index": 1,
+                    "value": {
+                        "type": "STRING",
+                        "value": "hello"
+                    }
+                }
+            ]
+        },
+        {
+            "steps": [
+                {
+                    "operation": "PUSH",
+                    "value": 3
+                }
+            ],
+            "table": [
+                {
+                    "index": 0,
+                    "value": {
+                        "type": "INT",
+                        "value": 1
+                    }
+                },
+                {
+                    "index": 1,
+                    "value": {
+                        "type": "STRING",
+                        "value": "hello"
+                    }
+                }
+            ]
+        }
+    ]
+}
+    //接收函数：
+
+    var stmt_counter=0;
+    var queue=debugJson.result;
+    console.log(queue)
     var stackContainer = document.getElementById('stackblock');
-    var queueContainer = document.getElementById('listblock');
-    function pushstackItem(){
-        var item = Math.floor(Math.random()*100);
-        stack.push(item);
+
+
+    async function pushstackItem(val){
+        var item = val;
         var newItem = document.createElement('div');
         
         newItem.classList.add('block');
-        newItem.textContent=item;
+        newItem.textContent=val;
         newItem.style.backgroundColor = getRandomColor();
          // 设置新的堆栈项元素的初始状态
         newItem.style.opacity = 0;
@@ -516,9 +645,10 @@
             duration: 500,  // 动画持续时间为 0.5 秒
             easing: 'easeOutExpo'  // 使用缓动函数控制动画速度
         });
+        // await delay(550);
     }
 
-    function popstackItem(){
+    async function popstackItem(){
         // if(stack.length === 0){
         //     return;
         // }
@@ -541,80 +671,115 @@
                 //document.getElementById("myButton5").style.backgroundColor = "blue";
             }
         })
+        // await delay(550);
     }
 
-    function pushExistedItem(){
-        if(!queueContainer.hasChildNodes()){
-            return;
-        }
-        console.log("here");
-        document.getElementById("myButton5").disabled =true;
-        var firstItem = queueContainer.firstElementChild;
-        stackContainer.appendChild(firstItem);
-        var translateDirection='translateY';
-            anime({
-            targets: firstItem,
-            [translateDirection]: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
-            opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
-            duration: 500,  // 动画持续时间为 0.5 秒
-            easing: 'easeOutExpo',  // 使用缓动函数控制动画速度
-            complete:function(){
-                document.getElementById("myButton5").disabled = false;
-            }
-        });
-    }
+    // function pushExistedItem(){
+    //     if(!queueContainer.hasChildNodes()){
+    //         return;
+    //     }
+    //     console.log("here");
+    //     document.getElementById("myButton5").disabled =true;
+    //     var firstItem = queueContainer.firstElementChild;
+    //     stackContainer.appendChild(firstItem);
+    //     var translateDirection='translateY';
+    //         anime({
+    //         targets: firstItem,
+    //         [translateDirection]: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+    //         opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+    //         duration: 500,  // 动画持续时间为 0.5 秒
+    //         easing: 'easeOutExpo',  // 使用缓动函数控制动画速度
+    //         complete:function(){
+    //             document.getElementById("myButton5").disabled = false;
+    //         }
+    //     });
+    // }
 
 
-    function popqueueItem(){
-        var firstItem = queueContainer.firstElementChild;
+    // function popqueueItem(){
+    //     var firstItem = queueContainer.firstElementChild;
 
-        anime({
-            targets: firstItem,
-            translateX: [0,-100],
-            opacity:[1,0],
-            duration:500,
-            easing:'easeOutExpo',
-            complete:function(){
-                console.log("deleted susccess");
-                queueContainer.removeChild(firstItem);
-            }
-        })
-    }
-
+    //     anime({
+    //         targets: firstItem,
+    //         translateX: [0,-100],
+    //         opacity:[1,0],
+    //         duration:500,
+    //         easing:'easeOutExpo',
+    //         complete:function(){
+    //             console.log("deleted susccess");
+    //             queueContainer.removeChild(firstItem);
+    //         }
+    //     })
+    // }
+    
     function nextStep(){
-        if(!queueContainer.hasChildNodes()){
-            document.getElementById("myButton5").disabled =true;
-            document.getElementById("myButton5").style.backgroundColor = "";
+
+        document.getElementById("myButton5").style.backgroundColor = "";
+        document.getElementById('myButton5').disabled=true; 
+        if(stmt_counter+1 > queue.length){
+            return;
+        };
+        deal(0);
+
+    }
+
+    function deal(index){
+        if(index+1>queue[stmt_counter].steps.length) {
+            stmt_counter++;
+            document.getElementById("myButton5").style.backgroundColor = "blue";
+        document.getElementById('myButton5').disabled=false; 
             return;
         }
-        if(queueContainer.firstElementChild.textContent === '+') add_operation();
-        else {
-            document.getElementById("myButton5").style.backgroundColor = "";
-            pushExistedItem();
-            setTimeout(function(){
-                document.getElementById("myButton5").style.backgroundColor = "blue";
-            },550);
-        }
+        var step = queue[stmt_counter].steps[index];
+                if(step.operation =="POP") {
+                    popstackItem();
+                    setTimeout(function(){
+                        deal(index+1);
+                    },550);
 
+                }
+                if(step.operation =="PUSH"){
+                    pushstackItem(step.value);
+                    setTimeout(function(){
+                        deal(index+1);
+                    },550)
+                }
+                if(step.opeartion =="ERROR"){
+                }
     }
 
-    function add_operation(){
-        document.getElementById("myButton5").style.backgroundColor = "";
-        document.getElementById('myButton5').disabled=true;
-        popstackItem();
-        setTimeout(function(){
-            popstackItem(); 
-            setTimeout(function(){
-                popqueueItem();
-                setTimeout(function(){
-                    pushExistedItem();
-                    document.getElementById("myButton5").style.backgroundColor = "blue";
-                    document.getElementById('myButton5').disabled=false;
-                },550);
-            },550);
-        },550);
+    // async function add_operation(){
+    //     document.getElementById("myButton5").style.backgroundColor = "";
+    //     document.getElementById('myButton5').disabled=true;
+    //     popstackItem();
+    //     await delay(550);
+    //     popstackItem(); 
+    //     await delay(550);
+    //     popqueueItem();
+    //     await delay(550)
+    //     pushExistedItem();
+    //     await delay(550);
+    //     document.getElementById("myButton5").style.backgroundColor = "blue";
+    //     document.getElementById('myButton5').disabled=false;
 
-    }
+    // }    
+    // function add_operation(){
+    //     document.getElementById("myButton5").style.backgroundColor = "";
+    //     document.getElementById('myButton5').disabled=true;
+    //     popstackItem();
+    //     setTimeout(function(){
+    //         popstackItem(); 
+    //         setTimeout(function(){
+    //             popqueueItem();
+    //             setTimeout(function(){
+    //                 pushExistedItem();
+    //                 document.getElementById("myButton5").style.backgroundColor = "blue";
+    //                 document.getElementById('myButton5').disabled=false;
+    //             },550);
+    //         },550);
+    //     },550);
+    // }
+
     // 生成随机颜色函数
     function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -623,6 +788,10 @@
         color += letters[Math.floor(Math.random() * 16)];
      }
     return color;
+    }
+    //指定延迟用
+    function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
     }
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
