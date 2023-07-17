@@ -12,12 +12,29 @@
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
    <script src="./lightbox2-2.11.4/lightbox2-2.11.4/dist/js/lightbox-plus-jquery.js"></script>
    <link href="lightbox2-2.11.4/lightbox2-2.11.4/dist/css/lightbox.min.css" rel="stylesheet" />
+   <script src="./echarts.js"></script>
     <style>
        .layui-nav-item.end:hover {
        background-color: rgb(74, 14, 14);
        border-radius: 10px;
        }
-
+       .container{
+           display: flex;
+           width:100% ;
+           height: 550px;
+           background-color: rgb(237, 206, 165);
+           flex-direction: row;
+       }
+       #main{
+        position: relative;
+        height: 40vh;
+        overflow: hidden;
+       }
+      .introduce{
+        width: 50vw;
+        height: 100%;
+        background-color: azure;
+      } 
        
     </style>
 </head>
@@ -75,59 +92,109 @@
             <button id="prev"><</button>
             <button id="next">></button>
           </div>
-          <!-- <div id="carousel" class="uml1block">
-            <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png" alt=""></a>
-            <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg" alt=""></a>
-            <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg" alt=""></a>
-            <button id="prev"><</button>
-            <button id="next">></button>
-          </div> -->
-          <!-- <a href="./img/uml2.jpg" data-lightbox="image-3" > <img src="./img/uml2.jpg" ></a> -->
+          <div class="container">
+            <div id="main" style="width: 650px;height:550px;"></div>
+            <div class="introduce"></div>  
+          </div>
+         
     </article>
     
 
 
     <script>
-var carousel = document.getElementById("carousel");
-var items = carousel.getElementsByTagName("a"); // 获取所有<a>标签
-var images = carousel.getElementsByTagName("img");
-var prev = document.getElementById("prev");
-var next = document.getElementById("next");
-var current = 0;
-
-function showItem(index) {
-  images[current].classList.remove("active");
-  items[current].classList.remove("active"); // 移除当前<a>标签的 active 样式
-  images[index].classList.add("active");
-  items[index].classList.add("active"); // 添加目标<a>标签的 active 样式
-  current = index;
-}
-
-prev.addEventListener("click", function() {
-  var index = current - 1;
-  if (index < 0) {
-    index = images.length - 1;
-  }
-  showItem(index);
-});
-
-next.addEventListener("click", function() {
-  var index = current + 1;
-  if (index >= images.length) {
-    index = 0;
-  }
-  showItem(index);
-});
-
-showItem(current);
-
-
+      var carousel = document.getElementById("carousel");
+      var items = carousel.getElementsByTagName("a"); // 获取所有<a>标签
+      var images = carousel.getElementsByTagName("img");
+      var prev = document.getElementById("prev");
+      var next = document.getElementById("next");
+      var current = 0;
+      
+      function showItem(index) {
+        images[current].classList.remove("active");
+        items[current].classList.remove("active"); // 移除当前<a>标签的 active 样式
+        images[index].classList.add("active");
+        items[index].classList.add("active"); // 添加目标<a>标签的 active 样式
+        current = index;
+      }
+      
+      prev.addEventListener("click", function() {
+        var index = current - 1;
+        if (index < 0) {
+          index = images.length - 1;
+        }
+        showItem(index);
+      });
+      
+      next.addEventListener("click", function() {
+        var index = current + 1;
+        if (index >= images.length) {
+          index = 0;
+        }
+        showItem(index);
+      });
+      
+      showItem(current);
      </script>
+
+<script type="text/javascript">
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  legend: {
+    top: 'bottom'
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      mark: { show: true },
+      dataView: { show: true, readOnly: false },
+      restore: { show: true },
+      saveAsImage: { show: true }
+    }
+  },
+  series: [
+    {
+      name: 'Nightingale Chart',
+      type: 'pie',
+      radius: [50, 250],
+      center: ['50%', '50%'],
+      roseType: 'area',
+      itemStyle: {
+        borderRadius: 8
+      },
+      data: [
+
+        { value: 11, name: 'Lex' },
+        { value: 10, name: 'CSS' },
+        { value: 18, name: 'GO' },
+        { value: 35, name: 'Yacc' },
+        { value: 38, name: 'CMake' },
+        { value: 47, name: 'HTML' },
+        { value: 91.6, name: 'C++' },
+        { value: 93.6, name: 'JavaScript' },
+      ]
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+</script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
      
 </body>
 
 </html>
+
+  <!-- <div id="carousel" class="uml1block">
+    <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png" alt=""></a>
+    <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg" alt=""></a>
+    <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg" alt=""></a>
+    <button id="prev"><</button>
+    <button id="next">></button>
+  </div> -->
+  <!-- <a href="./img/uml2.jpg" data-lightbox="image-3" > <img src="./img/uml2.jpg" ></a> -->
 
 <!-- 
   // lightbox.option({
