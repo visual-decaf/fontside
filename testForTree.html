@@ -144,7 +144,20 @@
 
 
     <script>
-       //Initialized var for syntax tree
+    //user-id
+    var id="null";
+    var xhr = new XMLHttpRequest();
+              xhr.addEventListener("readystatechange", function() {
+              if(this.readyState === 4) {
+              console.log(this.responseText);
+              id= JSON.parse(this.responseText).result;
+              console.log(id);
+              }
+              });
+    xhr.open("GET", "http://172.20.22.166:8080/enter/id");
+    xhr.send();
+
+    //Initialized var for syntax tree
     var nodelist = [];
     var edgelist = [];
     var count=1;
@@ -226,7 +239,7 @@
             console.log(this.responseText);
         }
         });
-        xhr.open("POST", "http://172.20.22.166:8080/code?id=1030958209");
+        xhr.open("POST", "http://172.20.22.166:8080/code?id="+id.toString());
         xhr.send(data);
 
         myButton.disabled = true;
@@ -277,13 +290,19 @@
 
         xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
-            jsonStr = this.responseText.result;
+            console.log("tokens accepted"+this.responseText);
+            jsonStr = JSON.parse(this.responseText);
+            let token_text = document.getElementById("token_scanner");
+            console.log(jsonStr);
+            let tokenlist=jsonStr.result;
+            console.log(tokenlist);
+            tokenlist.forEach(element => {
+            token_text.value+=('<'+element.type+', '+element.lexeme+'>\n');
+            console.log('<'+element.type+', '+element.lexeme+'>');
+        });
         }
         });
-        //xhr.setHeader("Access-Control-Allow-Origin", "http://172.20.22.166:8080");
-  // 允许发送包含凭据的请求
-        //xhr.setHeader("Access-Control-Allow-Credentials", "true");
-        xhr.open("GET", "http://172.20.22.166:8080/tokens?id=1030958209");
+        xhr.open("GET", "http://172.20.22.166:8080/tokens?id="+id.toString());
         xhr.send();
         
 
@@ -298,15 +317,7 @@
         // }
         // };
         // xhr.send();
-        let token_text = document.getElementById("token_scanner");
 
-        console.log(jsonStr);
-        let tokenlist=jsonStr.result;
-        console.log(tokenlist);
-        tokenlist.forEach(element => {
-            token_text.value+=('<'+element.type+', '+element.lexeme+'>\n');
-            console.log('<'+element.type+', '+element.lexeme+'>');
-        });
       }
       });
 
@@ -345,8 +356,15 @@
         ],
         "resultType": "VOID"
     }
-}
-        buildtree(jsonStr.result,0,1);
+    }
+        //发送请求获取json
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            jsonStr = JSON.parse(this.responseText);
+            buildtree(jsonStr.result,0,1);
         console.log(nodelist);
         console.log(edgelist);
         let nodes = new vis.DataSet(nodelist);
@@ -367,6 +385,10 @@
         nodelist = [];
         edgelist = [];
         count=1;
+        }
+        });
+        xhr.open("GET", "http://172.20.22.166:8080/ast?id="+id.toString());
+        xhr.send();
         //document.getElementById("myButton4").disabled = false;
         //document.getElementById("myButton4").style.backgroundColor = "blue";
       }
@@ -439,28 +461,25 @@
         }
     }
 }
-        //URL-GET-REQUEST
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "http://test-cn.your-api-server.com/program", false);
-        // xhr.onreadystatechange = function() {
-        // console.log(xhr.status);
-        // if (xhr.status == 200) {
-        // //json-interface
-        //     jsonStr =xhr.responseText;
-        // }
-        // };
-        // xhr.send();
+        //发送请求获取json
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
 
-        let token_text = document.getElementById("byte_code");
-
-        console.log(jsonStr);
-        let tokenlist=jsonStr.result.bytecode;
-        console.log(tokenlist);
-        tokenlist.forEach(element => {
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            jsonStr =JSON.parse(this.responseText);
+            let token_text = document.getElementById("byte_code");
+            console.log(jsonStr);
+            let tokenlist=jsonStr.result.bytecode;
+            console.log(tokenlist);
+            tokenlist.forEach(element => {
             token_text.value+=element+'\n';
             console.log(element);
         })
-        
+        }
+        });
+        xhr.open("GET", "http://172.20.22.166:8080/program?id="+id.toString());
+        xhr.send();
       }
       });
 
@@ -472,11 +491,19 @@
     //  });
   // 对myButton5点击事件的响应
   document.getElementById("myButton5").addEventListener("click", function() {
-        // if (!document.getElementById("myButton5").disabled) {
-        // document.getElementById("myButton5").disabled = true;
-        // document.getElementById("myButton5").style.backgroundColor = "";
-        // };
+    //发送请求获取json
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function() {
+    if(this.readyState === 4) {
+        debugJson = JSON.parse(this.responseText);
+        queue=debugJson.result;
+        console.log(queue);
         nextStep();
+    }
+    });
+    xhr.open("GET", "http://172.20.22.166:8080/debug?id="+id.toString());
+    xhr.send();
     })
     var table = document.getElementById("table1");
     var content = table.querySelector(".content");
@@ -614,10 +641,8 @@
     ]
 }
     //接收函数：
-
     var stmt_counter=0;
     var queue=debugJson.result;
-    console.log(queue)
     var stackContainer = document.getElementById('stackblock');
 
 
@@ -713,7 +738,6 @@
     // }
     
     function nextStep(){
-
         document.getElementById("myButton5").style.backgroundColor = "";
         document.getElementById('myButton5').disabled=true; 
         if(stmt_counter+1 > queue.length){
@@ -731,6 +755,7 @@
             return;
         }
         var step = queue[stmt_counter].steps[index];
+        console.log(step);
                 if(step.operation =="POP") {
                     popstackItem();
                     setTimeout(function(){
@@ -739,7 +764,7 @@
 
                 }
                 if(step.operation =="PUSH"){
-                    pushstackItem(step.value);
+                    pushstackItem(step.item.value);
                     setTimeout(function(){
                         deal(index+1);
                     },550)
