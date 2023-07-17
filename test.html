@@ -1,75 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stack Demo</title>
-  <style>
-    .stack {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .stack-item {
-      width: 100px;
-      height: 50px;
-      background-color: #f2f2f2;
-      border: 1px solid #ccc;
-      margin: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-    }
-  </style>
+	<title>图片展示器</title>
+	<style>
+		#gallery {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+		#gallery img {
+			max-width: 100%;
+			height: auto;
+			margin-bottom: 20px;
+			cursor: pointer;
+		}
+		#image-modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,0.8);
+			z-index: 9999;
+		}
+		#image-modal img {
+			max-width: 90%;
+			max-height: 90%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	</style>
 </head>
 <body>
-  <div class="stack"></div>
-  <button id="push">Push</button>
-  <button id="pop">Pop</button>
-  <script>
-    var stack = [];  // 定义一个空栈
+	<div id="gallery">
+		<img src="./img/uml1.png" alt="">
+		<img src="./img/uml2.jpg" alt="">
+		<img src="./img/uml3.jpg" alt="">
+	</div>
+	<div id="image-modal">
+		<img src="" />
+	</div>
+	<script src="gallery.js"></script>
+<script>
+    const gallery = document.getElementById('gallery');
+const modal = document.getElementById('image-modal');
+const modalImg = document.querySelector('#image-modal img');
 
-    var stackDiv = document.querySelector('.stack');
+gallery.addEventListener('click', (event) => {
+  if (event.target.tagName === 'IMG') {
+    modal.style.display = 'block';
+    modalImg.src = event.target.src;
+  }
+});
 
-    var pushButton = document.getElementById('push');
-    pushButton.addEventListener('click', function() {
-      var newItem = document.createElement('div');
-      newItem.classList.add('stack-item');
-      newItem.textContent = stack.length + 1;
-      stackDiv.appendChild(newItem);
-      stack.push(newItem);
-    });
-
-    var popButton = document.getElementById('pop');
-    popButton.addEventListener('click', function() {
-      var item = stack.pop();
-      if (item) {
-        stackDiv.removeChild(item);
-      }
-<<<<<<< Updated upstream
-    });
-  </script>
-=======
-       });
-      // 对myButton2点击事件的响应
-       document.getElementById("myButton2").addEventListener("click", function() {
-       if (!document.getElementById("myButton2").disabled) {
-        document.getElementById("myButton2").disabled = true;
-        document.getElementById("myButton2").style.backgroundColor = "";
-        document.getElementById("myButton3").disabled = false;
-        document.getElementById("myButton3").style.backgroundColor = "blue";
-      }
-      });
-     var editor1 = ace.edit("editor1", {
-     theme: "ace/theme/tomorrow_night_blue",
-     mode: "ace/mode/javascript",
-     autoScrollEditorIntoView: true,
-     });
-
-     
-     </script>
-<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
-<!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->
-<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
->>>>>>> Stashed changes
+modal.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+</script>
 </body>
 </html>

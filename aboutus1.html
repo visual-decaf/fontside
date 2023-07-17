@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>visual decaf</title>
+	<script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="css/aboutus.css">
+	<link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
+	<style>
+		.layui-nav-item.end:hover {
+			background-color: rgb(74, 14, 14);
+			border-radius: 10px;
+		}
+	</style>
+</head>
+<body>
+	<input type="checkbox" id="check" />
+	<label for="check">
+		<svg viewBox="0 0 30 30" width="30" height="30">
+			<path id="one" d="M4 10h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+			<path id="two" d="M4 20h22M4" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+		</svg> 
+	</label>
+	<div class="head">
+		<div class="logo">
+			<img src="./img/logo.png" alt="SVG Image" > 
+			<h4>visual decaf</h4>
+			<ul class="layui-nav layui-bg-cyan">
+				<li class="layui-nav-item"><a href="./maintest.html">开始使用</a></li>
+				<li class="layui-nav-item" id="image-item">菜单1</li>
+				<li class="layui-nav-item">菜单2</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;">更多</a>
+					<dl class="layui-nav-child">
+						<dd><a href="">关于我们</a></dd>
+						<dd><a href="">选项2</a></dd>
+						<dd><a href="">选项3</a></dd>
+					</dl>
+				</li>
+				<li class="layui-nav-item end">结束使用</li>
+			</ul>
+		</div>
+	</div>
+	<aside>
+		<div class="top">
+			<h2>团队成员</h2>
+			<ul>
+				<li>姚祉圻:编译器实现</li>
+				<li></li>
+				<li>许仕佳</li>
+				<li>范嘉豪</li>
+				<li>梁国轩</li>
+				<li>欧宇杰</li>
+			</ul>
+		</div>
+		<div class="bottom">
+			<p>&copy; 2023 by van</p>
+		</div>
+	</aside>
+	<article>
+		<div id="carousel" class="uml1block">
+			<img src="./img/uml1.png" alt="">
+			<img src="./img/uml2.jpg" alt="">
+			<img src="./img/uml3.jpg" alt="">
+			<button id="prev"><</button>
+			<button id="next">></button>
+		</div>
+	</article>
+	<script>
+		var carousel = document.getElementById("carousel");
+		var images = carousel.getElementsByTagName("img");
+		var prev = document.getElementById("prev");
+		var next = document.getElementById("next");
+		var current = 0;
+
+		function showItem(index) {
+			images[current].classList.remove("active");
+			images[index].classList.add("active");
+			current = index;
+		}
+
+		prev.addEventListener("click", function() {
+			var index = current - 1;
+			if (index < 0) {
+				index = images.length - 1;
+			}
+			showItem(index);
+		});
+
+		next.addEventListener("click", function() {
+			var index = current + 1;
+			if (index >= images.length) {
+				index = 0;
+			}
+			showItem(index);
+		});
+
+		showItem(current);
+	</script>
+	<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+</body>
+</html>

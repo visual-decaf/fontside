@@ -10,7 +10,7 @@
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
    <link rel="stylesheet" href="css/aboutus.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
-   <script src="./lightbox2-2.11.4/lightbox2-2.11.4/dist/js/lightbox-plus-jquery.min.js"></script>
+   <script src="./lightbox2-2.11.4/lightbox2-2.11.4/dist/js/lightbox-plus-jquery.js"></script>
    <link href="lightbox2-2.11.4/lightbox2-2.11.4/dist/css/lightbox.min.css" rel="stylesheet" />
     <style>
        .layui-nav-item.end:hover {
@@ -69,16 +69,16 @@
     </aside>
     <article>
         <div id="carousel" class="uml1block">
-          <a href="./img/uml1.png" data-lightbox="image-1"><img src="./img/uml1.png"  alt=""></a>
-          <a href="./img/uml2.jpg" data-lightbox="image-2"><img src="./img/uml2.jpg"  alt=""></a>
-          <a href="./img/uml3.jpg" data-lightbox="image-3"><img src="./img/uml3.jpg"  alt=""></a>
+          <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png"  alt=""></a>
+          <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg"  alt=""></a>
+          <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg"  alt=""></a>
             <button id="prev"><</button>
             <button id="next">></button>
           </div>
           <!-- <div id="carousel" class="uml1block">
-            <a href="#" data-src="./img/uml1.png" data-lightbox="image-1"><img src="./img/uml1.png"  alt=""></a>
-            <a href="#" data-src="./img/uml2.jpg" data-lightbox="image-2"><img src="./img/uml2.jpg"  alt=""></a>
-            <a href="#" data-src="./img/uml3.jpg" data-lightbox="image-3"><img src="./img/uml3.jpg"  alt=""></a>
+            <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png" alt=""></a>
+            <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg" alt=""></a>
+            <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg" alt=""></a>
             <button id="prev"><</button>
             <button id="next">></button>
           </div> -->
@@ -121,7 +121,16 @@ next.addEventListener("click", function() {
 
 showItem(current);
 
-// lightbox.option({
+
+     </script>
+     <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+     
+</body>
+
+</html>
+
+<!-- 
+  // lightbox.option({
 //     'resizeDuration': 200,
 //     'wrapAround': true,
 //     'disableScrolling': true,
@@ -129,6 +138,7 @@ showItem(current);
 //     'alwaysShowNavOnTouchDevices': true,
 //     'albumLabel': '第 %1 张，共 %2 张'
 //   }, '[data-lightbox="image"]');
+
 //   var carousel = document.getElementById("carousel");
 //   var items = carousel.getElementsByTagName("a");
 //   var images = carousel.getElementsByTagName("img");
@@ -142,6 +152,7 @@ showItem(current);
 //     images[index].classList.add("active");
 //     items[index].classList.add("active");
 //     current = index;
+
 //   }
 
 //   prev.addEventListener("click", function() {
@@ -161,7 +172,6 @@ showItem(current);
 //   });
 
 //   for (var i = 0; i < items.length; i++) {
-//     items[i].setAttribute('href', '#');
 //     items[i].setAttribute('data-lightbox', 'image');
 //     items[i].addEventListener('click', function() {
 //       var index = Array.prototype.indexOf.call(items, this);
@@ -170,9 +180,4 @@ showItem(current);
 //   }
 
 //   showItem(current);
-     </script>
-     <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
-     
-</body>
-
-</html>
+ -->
