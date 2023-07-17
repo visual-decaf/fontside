@@ -10,6 +10,8 @@
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
    <link rel="stylesheet" href="css/aboutus.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
+   <script src="./lightbox2-2.11.4/lightbox2-2.11.4/dist/js/lightbox-plus-jquery.js"></script>
+   <link href="lightbox2-2.11.4/lightbox2-2.11.4/dist/css/lightbox.min.css" rel="stylesheet" />
     <style>
        .layui-nav-item.end:hover {
        background-color: rgb(74, 14, 14);
@@ -31,7 +33,7 @@
     </label>
             <div class="head">
             <div class="logo">
-                <img src="./img/logo.svg" alt="SVG Image" > 
+                <img src="./img/logo.png" alt="SVG Image" > 
                 <h4>visual decaf</h4>
                 <ul class="layui-nav layui-bg-cyan">
                     <li class="layui-nav-item"><a href="./maintest.html">开始使用</a></li>
@@ -67,27 +69,37 @@
     </aside>
     <article>
         <div id="carousel" class="uml1block">
-            <img src="./img/uml1.png" alt="">
-            <img src="./img/uml2.jpg" alt="">
+          <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png"  alt=""></a>
+          <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg"  alt=""></a>
+          <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg"  alt=""></a>
             <button id="prev"><</button>
             <button id="next">></button>
           </div>
-
-       
+          <!-- <div id="carousel" class="uml1block">
+            <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png" alt=""></a>
+            <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg" alt=""></a>
+            <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg" alt=""></a>
+            <button id="prev"><</button>
+            <button id="next">></button>
+          </div> -->
+          <!-- <a href="./img/uml2.jpg" data-lightbox="image-3" > <img src="./img/uml2.jpg" ></a> -->
     </article>
     
 
 
     <script>
 var carousel = document.getElementById("carousel");
+var items = carousel.getElementsByTagName("a"); // 获取所有<a>标签
 var images = carousel.getElementsByTagName("img");
 var prev = document.getElementById("prev");
 var next = document.getElementById("next");
 var current = 0;
 
-function showImage(index) {
+function showItem(index) {
   images[current].classList.remove("active");
+  items[current].classList.remove("active"); // 移除当前<a>标签的 active 样式
   images[index].classList.add("active");
+  items[index].classList.add("active"); // 添加目标<a>标签的 active 样式
   current = index;
 }
 
@@ -96,7 +108,7 @@ prev.addEventListener("click", function() {
   if (index < 0) {
     index = images.length - 1;
   }
-  showImage(index);
+  showItem(index);
 });
 
 next.addEventListener("click", function() {
@@ -104,13 +116,68 @@ next.addEventListener("click", function() {
   if (index >= images.length) {
     index = 0;
   }
-  showImage(index);
+  showItem(index);
 });
 
-showImage(current);
+showItem(current);
+
 
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+     
 </body>
 
 </html>
+
+<!-- 
+  // lightbox.option({
+//     'resizeDuration': 200,
+//     'wrapAround': true,
+//     'disableScrolling': true,
+//     'positionFromTop': 50,
+//     'alwaysShowNavOnTouchDevices': true,
+//     'albumLabel': '第 %1 张，共 %2 张'
+//   }, '[data-lightbox="image"]');
+
+//   var carousel = document.getElementById("carousel");
+//   var items = carousel.getElementsByTagName("a");
+//   var images = carousel.getElementsByTagName("img");
+//   var prev = document.getElementById("prev");
+//   var next = document.getElementById("next");
+//   var current = 0;
+
+//   function showItem(index) {
+//     images[current].classList.remove("active");
+//     items[current].classList.remove("active");
+//     images[index].classList.add("active");
+//     items[index].classList.add("active");
+//     current = index;
+
+//   }
+
+//   prev.addEventListener("click", function() {
+//     var index = current - 1;
+//     if (index < 0) {
+//       index = images.length - 1;
+//     }
+//     showItem(index);
+//   });
+
+//   next.addEventListener("click", function() {
+//     var index = current + 1;
+//     if (index >= images.length) {
+//       index = 0;
+//     }
+//     showItem(index);
+//   });
+
+//   for (var i = 0; i < items.length; i++) {
+//     items[i].setAttribute('data-lightbox', 'image');
+//     items[i].addEventListener('click', function() {
+//       var index = Array.prototype.indexOf.call(items, this);
+//       showItem(index);
+//     });
+//   }
+
+//   showItem(current);
+ -->
