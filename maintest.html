@@ -12,6 +12,8 @@
    <link rel="stylesheet" href="css/style5.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
    <link rel="prefetch" href="login.html">
+   <link href="./node_modules/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
     <style>
        .layui-nav-item.end:hover {
        background-color: rgb(74, 14, 14);
@@ -121,9 +123,9 @@
                 <div class="table"> 
                   <div class="table1" id="table1">
                     <div class="content">
-                    <div class="list">
+                    <!-- <div class="list">
                         <div class="listblock" id="listblock"></div>
-                    </div>
+                    </div> -->
                     <div class="stack" >
                         <div class="stackblock" id="stackblock"></div>
                     </div>
@@ -131,19 +133,35 @@
                   </div>
 
                   <div id="editor1"></div>
-                  <div class="table2"></div>
+                  <div class="table2" id="wrapper"></div>
                 </div>
                 
                 <div class="btn">
                     <button id="myButton5" disabled>下一步</button>
-                    <button id="myButton6" disabled>出栈</button>
+                    <button id="myButton6" disabled>符号表演示</button>
                 </div>
             </div>
         </div>
     </article>
     
 
-
+    <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
+    <script >
+		new gridjs.Grid({
+    columns: ["row", "type", "value"],
+    data: [
+      ["1", "INT", "1"],
+      ["2", "STRING", "hello"],
+      ["3", "FLOAT", "1.2"],
+      ["1", "INT", "1"],
+      ["2", "STRING", "hello"],
+      ["3", "FLOAT", "1.2"],
+      ["1", "INT", "1"],
+      ["2", "STRING", "hello"],
+      ["3", "FLOAT", "1.2"]
+    ]
+  }).render(document.getElementById("wrapper"));
+	</script>
     <script>
        //Initialized var for syntax tree
     var nodelist = [];
@@ -438,45 +456,7 @@
       }
     });
 
-    // const nextButton = document.querySelector('#myButton5');
-    // const blockFirst = document.querySelector('.block.first');
-    // const stackBlock = document.querySelector('.stackblock');
-    
-    // nextButton.addEventListener('click', () => {
-    //   stackBlock.insertBefore(blockFirst, null);
-    // });
 
-    //  入栈操作
-//     const nextButton = document.querySelector('#myButton5');
-//     const listBlock = document.querySelector('.listblock');
-//     const stackBlock = document.querySelector('.stackblock');
-    
-//     // nextButton.addEventListener('click', () => {
-//     //   const nextBlock = listBlock.querySelector('.block');
-//     //   if (nextBlock) {
-//     //     stackBlock.appendChild(nextBlock);
-//     //   }
-//     // });
-//     nextButton.addEventListener('click', () => {
-//   const nextBlock = listBlock.querySelector('.block');
-//   if (nextBlock) {
-//     stackBlock.appendChild(nextBlock);
-//     // if (stackBlock.scrollHeight >40 *16) { // 5.5rem = 5.5 * 16px (assuming font-size: 16px)
-//     //   stackBlock.style.height = `${stackBlock.scrollHeight + 5.5 * 16}px`;
-//     // }
-//     if (stackBlock.children.length >= 7) {
-//         stackBlock.style.height = `${stackBlock.children.length * 5.5}em`;
-//     }
-//    }
-//   });
-
-//   //  出栈操作
-//   const deleteButton = document.querySelector('#myButton6');
-//    deleteButton.addEventListener('click', () => {
-//      if (stackBlock.children.length > 0) {
-//        stackBlock.removeChild(stackBlock.lastElementChild);
-//      }
-//    });
 
    //堆栈动画部分
     //queue从接口接收数据
@@ -625,6 +605,9 @@
      }
     return color;
     }
+
+
+
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
