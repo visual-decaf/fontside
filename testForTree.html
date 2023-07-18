@@ -8,6 +8,8 @@
     <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_modules/animejs/lib/anime.js"></script>
+    <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
+    <link href="./node_modules/gridjs/dist/theme/mermaid.css" rel="stylesheet">
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
    <link rel="stylesheet" href="css/test.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
@@ -121,7 +123,10 @@
                   <div class="table1" id="table1">
                     <div class="content">
                     <div class="list">
-                        <div class="listblock" id="listblock"></div>
+                        <div class="listblock" id="listblock">
+                            <div class="resultText">Result: </div>
+                            <div class="result" id="result"></div>
+                        </div>
                     </div>
                     <div class="stack" >
                         <div class="stackblock" id="stackblock"></div>
@@ -130,7 +135,7 @@
                   </div>
 
                   <div id="editor1"></div>
-                  <div class="table2"></div>
+                  <div class="table2" id="symbolTable"></div>
                 </div>
                 
                 <div class="btn">
@@ -144,6 +149,16 @@
 
 
     <script>
+        
+    const symtable_container = document.getElementById('symbolTable');
+    var grid = new gridjs.Grid({
+    columns:["index","type","value"],
+    data:[{index:1,type:"good",value:15}]
+    })
+    grid.render(document.getElementById("symbolTable"));
+    symtable_container.innerHTML = ''; // 清空容器元素的内容
+    grid.updateConfig({data:[{index:2,type:"bad",value:16},{index:5,type:"sad",value: 18}]});
+    grid.render(document.getElementById("symbolTable"));
     //user-id
     var id="null";
     var xhr = new XMLHttpRequest();
@@ -398,6 +413,7 @@
      mode: "ace/mode/javascript",
      autoScrollEditorIntoView: true,
      });
+     editor1.setHighlightActiveLine(true);
 
 //      var table1 = document.querySelector('.table1');
 // var ctrlDown = false;
@@ -474,6 +490,8 @@
             console.log(tokenlist);
             tokenlist.forEach(element => {
             token_text.value+=element+'\n';
+            editor1.setValue(token_text.value,-1);
+            editor1.setReadOnly(true);
             console.log(element);
         })
         }
@@ -496,6 +514,7 @@
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function() {
     if(this.readyState === 4) {
+        console.log(this.responseText);
         debugJson = JSON.parse(this.responseText);
         queue=debugJson.result;
         console.log(queue);
@@ -561,92 +580,14 @@
 
    //堆栈动画部分
     //queue从接口接收数据
-    var debugJson={
-    "code": "1",
-    "msg": "Success",
-    "result": [
-        {
-            "steps": [
-                {
-                    "operation": "PUSH",
-                    "value": 1
-                },
-                {
-                    "operation": "PUSH",
-                    "value": 1
-                },
-                {
-                    "operation": "PUSH",
-                    "value": 1
-                },
-                {
-                    "operation": "POP",
-                    "item": null
-                },
-                {
-                    "operation": "POP",
-                    "item": null
-                },
-                {
-                    "operation": "PUSH",
-                    "value": 1
-                },
-                {
-                    "operation": "POP",
-                    "item": null
-                },
-                
-            ],
-            "table": [
-                {
-                    "index": 0,
-                    "value": {
-                        "type": "INT",
-                        "value": 1
-                    }
-                },
-                {
-                    "index": 1,
-                    "value": {
-                        "type": "STRING",
-                        "value": "hello"
-                    }
-                }
-            ]
-        },
-        {
-            "steps": [
-                {
-                    "operation": "PUSH",
-                    "value": 3
-                }
-            ],
-            "table": [
-                {
-                    "index": 0,
-                    "value": {
-                        "type": "INT",
-                        "value": 1
-                    }
-                },
-                {
-                    "index": 1,
-                    "value": {
-                        "type": "STRING",
-                        "value": "hello"
-                    }
-                }
-            ]
-        }
-    ]
-}
+    var debugJson={};
     //接收函数：
     var stmt_counter=0;
     var queue=debugJson.result;
     var stackContainer = document.getElementById('stackblock');
 
 
-    async function pushstackItem(val){
+    function pushstackItem(val){
         var item = val;
         var newItem = document.createElement('div');
         
@@ -673,7 +614,7 @@
         // await delay(550);
     }
 
-    async function popstackItem(){
+    function popstackItem(){
         // if(stack.length === 0){
         //     return;
         // }
@@ -743,6 +684,23 @@
         if(stmt_counter+1 > queue.length){
             return;
         };
+        var mydata=[];
+        var stepTable = queue[stmt_counter].table;
+        console.log(stepTable);
+        stepTable.forEach(function(item,index){
+            console.log("value.value is:"+item.value.value)
+            mydata.push({
+                index: item.index,
+                type: item.value.value.type,
+                value: item.value.value.value
+            })
+        })
+    symtable_container.innerHTML = ''; // 清空容器元素的内容
+    grid.destroy();
+    new gridjs.Grid({
+    columns:["index","type","value"],
+    data: mydata
+    }).render(symtable_container);
         deal(0);
 
     }
@@ -751,10 +709,11 @@
         if(index+1>queue[stmt_counter].steps.length) {
             stmt_counter++;
             document.getElementById("myButton5").style.backgroundColor = "blue";
-        document.getElementById('myButton5').disabled=false; 
+            document.getElementById('myButton5').disabled=false; 
             return;
         }
         var step = queue[stmt_counter].steps[index];
+        editor1.gotoLine(queue[stmt_counter].line);
         console.log(step);
                 if(step.operation =="POP") {
                     popstackItem();
@@ -764,12 +723,20 @@
 
                 }
                 if(step.operation =="PUSH"){
-                    pushstackItem(step.item.value);
+                    if(step.item.type == "LVALUE")
+                        pushstackItem(step.item.value.value.toString());
+                    else   
+                        pushstackItem(step.item.value.toString());
                     setTimeout(function(){
                         deal(index+1);
                     },550)
                 }
-                if(step.opeartion =="ERROR"){
+                if(step.operation =="PRINT"){
+                    console.log(step.item);
+                    document.getElementById("listblock").textContent= step.item;
+                    setTimeout(function(){
+                        deal(index+1);
+                    },550)
                 }
     }
 
