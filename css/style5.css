@@ -339,18 +339,19 @@ body{
     height: 100%;
     transform-origin: top left;
   }
-.list{
+.result{
     width: 100%;
     height: 18%;
-    background-color: #2ede98;
+    background-color: #fff;
 }
-.listblock{
+.resultblock{
     border-radius: 10px;
     display: flex;
     flex-direction: row;
     width: 100em;
     height: 5.5em;
     margin-left: 12em;
+    font-size: 20px;
     /* margin-top: 1.5em; */
     background-color: #fff;
 }
@@ -367,7 +368,7 @@ body{
 }
 .stack{
     width: 100%;
-    height: 100%;
+    height: 80%;
     /* background-color: #2e2ede; */
     background-color: #fff;
     display: flex;

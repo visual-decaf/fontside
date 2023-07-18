@@ -11,7 +11,7 @@
     <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
     <link href="./node_modules/gridjs/dist/theme/mermaid.css" rel="stylesheet">
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
-   <link rel="stylesheet" href="css/test.css">
+   <link rel="stylesheet" href="css/style5.css">
    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
     <style>
        .layui-nav-item.end:hover {
@@ -32,10 +32,10 @@
     </label>
             <div class="head">
             <div class="logo">
-                <img src="./img/logo.svg" alt="SVG Image" > 
+                <img src="./img/logo.png" alt="SVG Image" > 
                 <h4>visual decaf</h4>
                 <ul class="layui-nav layui-bg-cyan">
-                    <li class="layui-nav-item"><a href="./maintest.html">开始使用</a></li>
+                    <li class="layui-nav-item"><a href="./testForTree.html">开始使用</a></li>
                     <li class="layui-nav-item" id="image-item">菜单1</li>
                     <li class="layui-nav-item">菜单2</li>
                     <li class="layui-nav-item">
@@ -46,7 +46,7 @@
                         <dd><a href="">选项3</a></dd>
                       </dl>
                     </li>
-                    <li class="layui-nav-item end">结束使用</li>
+                    <li class="layui-nav-item end"><a href="./testForTree.html">结束使用</a></li>
                 </ul>
             </div>
         </div>
@@ -122,15 +122,14 @@
                 <div class="table"> 
                   <div class="table1" id="table1">
                     <div class="content">
-                    <div class="list">
-                        <div class="listblock" id="listblock">
-                            <div class="resultText">Result: </div>
-                            <div class="result" id="result"></div>
-                        </div>
-                    </div>
                     <div class="stack" >
                         <div class="stackblock" id="stackblock"></div>
                     </div>
+                    <div class="result">
+                        <div class="resultblock" id="resultblock">
+                            <div class="result" id="result">Result: </div>
+                        </div>
+                    </div>                
                   </div>
                   </div>
 
@@ -140,7 +139,6 @@
                 
                 <div class="btn">
                     <button id="myButton5" disabled>下一步</button>
-                    <button id="myButton6" disabled>出栈</button>
                 </div>
             </div>
         </div>
@@ -153,11 +151,8 @@
     const symtable_container = document.getElementById('symbolTable');
     var grid = new gridjs.Grid({
     columns:["index","type","value"],
-    data:[{index:1,type:"good",value:15}]
+    data:[]
     })
-    grid.render(document.getElementById("symbolTable"));
-    symtable_container.innerHTML = ''; // 清空容器元素的内容
-    grid.updateConfig({data:[{index:2,type:"bad",value:16},{index:5,type:"sad",value: 18}]});
     grid.render(document.getElementById("symbolTable"));
     //user-id
     var id="null";
@@ -176,22 +171,7 @@
     var nodelist = [];
     var edgelist = [];
     var count=1;
-    //buildtree function
-    // function buildtree(data,parentid,nodelevel){
-    //         let subtree = JSON.parse(data);
-    //         let currentid=count;
-    //         if(subtree.hasOwnProperty("operation"))
-    //             nodelist.push({id: count, label: subtree.operation, level: nodelevel});
-    //         if(subtree.hasOwnProperty("value"))
-    //             nodelist.push({id: count, label: subtree.value.toString(), level: nodelevel});
-    //         if(parentid!=0)
-    //             edgelist.push({from: parentid, to: count});
-    //         count++;
-    //         if(subtree.hasOwnProperty("left"))
-    //             buildtree(JSON.stringify(subtree.left), currentid, nodelevel+1);
-    //         if(subtree.hasOwnProperty("right"))
-    //             buildtree(JSON.stringify(subtree.right), currentid, nodelevel+1);
-    //  }
+
     //buildtree function
     function buildtree(data,parentid,nodelevel){
         let currentid=count;
@@ -321,18 +301,6 @@
         xhr.send();
         
 
-        //URL-GET-REQUEST
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "http://test-cn.your-api-server.com/tokens", false);
-        // xhr.onreadystatechange = function() {
-        // console.log(xhr.status);
-        // if (xhr.status == 200) {
-        // //json-interface
-        //     jsonStr =xhr.responseText;
-        // }
-        // };
-        // xhr.send();
-
       }
       });
 
@@ -415,37 +383,6 @@
      });
      editor1.setHighlightActiveLine(true);
 
-//      var table1 = document.querySelector('.table1');
-// var ctrlDown = false;
-// var scale = 1;
-
-// document.addEventListener('keydown', function(event) {
-//   if (event.key === 'Control') {
-//     ctrlDown = true;
-//   }
-// });
-
-// document.addEventListener('keyup', function(event) {
-//   if (event.key === 'Control') {
-//     ctrlDown = false;
-//   }
-// });
-
-// table1.addEventListener('wheel', function(event) {
-//   if (ctrlDown) {
-//     event.preventDefault();
-//     var delta = event.deltaY;
-//     scale = Math.min(Math.max(scale + delta * 0.001, 0.1), 10);
-//     var listblocks = table1.querySelectorAll('.listblock');
-//     var stackblocks = table1.querySelectorAll('.stackblock');
-//     for (var i = 0; i < listblocks.length; i++) {
-//       listblocks[i].style.transform = 'scale(' + scale + ')';
-//     }
-//     for (var i = 0; i < stackblocks.length; i++) {
-//       stackblocks[i].style.transform = 'scale(' + scale + ')';
-//     }
-//   }
-// });
   // 对myButton4点击事件的响应
   document.getElementById("myButton4").addEventListener("click", function() {
         if (!document.getElementById("myButton4").disabled) {
@@ -453,30 +390,8 @@
         document.getElementById("myButton4").style.backgroundColor = "";
         document.getElementById("myButton5").disabled = false;
         document.getElementById("myButton5").style.backgroundColor = "blue";
-        document.getElementById("myButton6").disabled = false;
-        document.getElementById("myButton6").style.backgroundColor = "blue";
-        let jsonStr = {
-    "code": "12",
-    "msg": "adipisicing in quis id",
-    "result": {
-        "bytecode": [
-            "GET_INSTANT 1",
-            "GET_INT_CONSTANT 2",
-            "MULTIPLY",
-            "GET_INSTANT 3",
-            "MOD"
-        ],
-        "resultType": "INT",
-        "constantPool": {
-            "intConstantPool": [
-                3
-            ],
-            "doubleConstantPool": [
-                3.14
-            ]
-        }
-    }
-}
+
+        let jsonStr = {};
         //发送请求获取json
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -486,14 +401,16 @@
             jsonStr =JSON.parse(this.responseText);
             let token_text = document.getElementById("byte_code");
             console.log(jsonStr);
-            let tokenlist=jsonStr.result.bytecode;
-            console.log(tokenlist);
-            tokenlist.forEach(element => {
-            token_text.value+=element+'\n';
-            editor1.setValue(token_text.value,-1);
+            let assemblyStr=jsonStr.result.assembly;
+            let bytecodeStr=jsonStr.result.bytecode;
+            var str='';
+            console.log(assemblyStr);
+            assemblyStr.forEach(element => {
+            str += (element+'\n');
+            })
+            editor1.setValue(str,-1);
             editor1.setReadOnly(true);
-            console.log(element);
-        })
+            token_text.value="Byte code: "+bytecodeStr+"\nAssembly: \n"+str;
         }
         });
         xhr.open("GET", "http://172.20.22.166:8080/program?id="+id.toString());
@@ -503,10 +420,7 @@
 
     //   控制缩放窗口
       const blocks = document.querySelectorAll('.block');
-    //  blocks.forEach(block => {
-    //    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    //    block.style.backgroundColor = '#' + randomColor;
-    //  });
+
   // 对myButton5点击事件的响应
   document.getElementById("myButton5").addEventListener("click", function() {
     //发送请求获取json
@@ -536,47 +450,6 @@
         content.style.transform = "scale(" + scale + ")";
       }
     });
-
-    // const nextButton = document.querySelector('#myButton5');
-    // const blockFirst = document.querySelector('.block.first');
-    // const stackBlock = document.querySelector('.stackblock');
-    
-    // nextButton.addEventListener('click', () => {
-    //   stackBlock.insertBefore(blockFirst, null);
-    // });
-
-    //  入栈操作
-//     const nextButton = document.querySelector('#myButton5');
-//     const listBlock = document.querySelector('.listblock');
-//     const stackBlock = document.querySelector('.stackblock');
-    
-//     // nextButton.addEventListener('click', () => {
-//     //   const nextBlock = listBlock.querySelector('.block');
-//     //   if (nextBlock) {
-//     //     stackBlock.appendChild(nextBlock);
-//     //   }
-//     // });
-//     nextButton.addEventListener('click', () => {
-//   const nextBlock = listBlock.querySelector('.block');
-//   if (nextBlock) {
-//     stackBlock.appendChild(nextBlock);
-//     // if (stackBlock.scrollHeight >40 *16) { // 5.5rem = 5.5 * 16px (assuming font-size: 16px)
-//     //   stackBlock.style.height = `${stackBlock.scrollHeight + 5.5 * 16}px`;
-//     // }
-//     if (stackBlock.children.length >= 7) {
-//         stackBlock.style.height = `${stackBlock.children.length * 5.5}em`;
-//     }
-//    }
-//   });
-
-//   //  出栈操作
-//   const deleteButton = document.querySelector('#myButton6');
-//    deleteButton.addEventListener('click', () => {
-//      if (stackBlock.children.length > 0) {
-//        stackBlock.removeChild(stackBlock.lastElementChild);
-//      }
-//    });
-
 
    //堆栈动画部分
     //queue从接口接收数据
@@ -611,19 +484,11 @@
             duration: 500,  // 动画持续时间为 0.5 秒
             easing: 'easeOutExpo'  // 使用缓动函数控制动画速度
         });
-        // await delay(550);
     }
 
     function popstackItem(){
-        // if(stack.length === 0){
-        //     return;
-        // }
-        // var poppedItem = stack.pop();
-        //document.getElementById("myButton5").style.backgroundColor = "";
         document.getElementById("myButton5").disabled = true;
         var lastItem = stackContainer.lastElementChild;
-        // console.log(lastItem);
-
         anime({
             targets: lastItem,
             translateY: [0,-100],
@@ -634,49 +499,10 @@
                 console.log("deleted susccess");
                 stackContainer.removeChild(lastItem);
                 document.getElementById("myButton5").disabled = false;
-                //document.getElementById("myButton5").style.backgroundColor = "blue";
             }
         })
         // await delay(550);
     }
-
-    // function pushExistedItem(){
-    //     if(!queueContainer.hasChildNodes()){
-    //         return;
-    //     }
-    //     console.log("here");
-    //     document.getElementById("myButton5").disabled =true;
-    //     var firstItem = queueContainer.firstElementChild;
-    //     stackContainer.appendChild(firstItem);
-    //     var translateDirection='translateY';
-    //         anime({
-    //         targets: firstItem,
-    //         [translateDirection]: [-100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
-    //         opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
-    //         duration: 500,  // 动画持续时间为 0.5 秒
-    //         easing: 'easeOutExpo',  // 使用缓动函数控制动画速度
-    //         complete:function(){
-    //             document.getElementById("myButton5").disabled = false;
-    //         }
-    //     });
-    // }
-
-
-    // function popqueueItem(){
-    //     var firstItem = queueContainer.firstElementChild;
-
-    //     anime({
-    //         targets: firstItem,
-    //         translateX: [0,-100],
-    //         opacity:[1,0],
-    //         duration:500,
-    //         easing:'easeOutExpo',
-    //         complete:function(){
-    //             console.log("deleted susccess");
-    //             queueContainer.removeChild(firstItem);
-    //         }
-    //     })
-    // }
     
     function nextStep(){
         document.getElementById("myButton5").style.backgroundColor = "";
@@ -733,45 +559,12 @@
                 }
                 if(step.operation =="PRINT"){
                     console.log(step.item);
-                    document.getElementById("listblock").textContent= step.item;
+                    document.getElementById("resultblock").textContent= "Result: "+step.item;
                     setTimeout(function(){
                         deal(index+1);
                     },550)
                 }
     }
-
-    // async function add_operation(){
-    //     document.getElementById("myButton5").style.backgroundColor = "";
-    //     document.getElementById('myButton5').disabled=true;
-    //     popstackItem();
-    //     await delay(550);
-    //     popstackItem(); 
-    //     await delay(550);
-    //     popqueueItem();
-    //     await delay(550)
-    //     pushExistedItem();
-    //     await delay(550);
-    //     document.getElementById("myButton5").style.backgroundColor = "blue";
-    //     document.getElementById('myButton5').disabled=false;
-
-    // }    
-    // function add_operation(){
-    //     document.getElementById("myButton5").style.backgroundColor = "";
-    //     document.getElementById('myButton5').disabled=true;
-    //     popstackItem();
-    //     setTimeout(function(){
-    //         popstackItem(); 
-    //         setTimeout(function(){
-    //             popqueueItem();
-    //             setTimeout(function(){
-    //                 pushExistedItem();
-    //                 document.getElementById("myButton5").style.backgroundColor = "blue";
-    //                 document.getElementById('myButton5').disabled=false;
-    //             },550);
-    //         },550);
-    //     },550);
-    // }
-
     // 生成随机颜色函数
     function getRandomColor() {
     var letters = '0123456789ABCDEF';
