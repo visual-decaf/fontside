@@ -147,7 +147,8 @@
 
     <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
     <script >
-		new gridjs.Grid({
+window.onload = function() {
+  const grid =new gridjs.Grid({
     columns: ["row", "type", "value"],
     data: [
       ["1", "INT", "1"],
@@ -161,6 +162,8 @@
       ["3", "FLOAT", "1.2"]
     ]
   }).render(document.getElementById("wrapper"));
+  
+
 	</script>
     <script>
        //Initialized var for syntax tree

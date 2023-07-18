@@ -22,7 +22,7 @@
            display: flex;
            width:100% ;
            height: 550px;
-           background-color: rgb(237, 206, 165);
+           /* background-color: rgb(237, 206, 165); */
            flex-direction: row;
        }
        #main{
@@ -31,11 +31,128 @@
         overflow: hidden;
        }
       .introduce{
-        width: 50vw;
+        width: calc(100% - 650px);
         height: 100%;
-        background-color: azure;
+        /* background-color: azure; */
       } 
-       
+      .about{
+        width: 100%;
+        margin:2px 3px;
+
+        font-weight: 700;
+        opacity: 0;
+       transition: opacity 1s ease-in-out;
+       border-radius: 10px;
+       border: 5px solid #2f4056;
+       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+    .about h5{
+    	width:90vw;
+    	color:  black;
+    	font-size: 15px;
+        font-weight: 700;
+    }
+    .about h5::before{
+        content:'';
+    	display: inline-block;
+    	width:10px;
+    	height:20px;
+    	margin-right: 10px;
+      margin-left: 10px;
+    	background-color: black;
+    }
+    .about p{
+        color:  black;
+        font-size: 15px;
+    	line-height: 1.8;
+    	margin: 3px 3px;
+    	text-indent:2em
+    }
+    .about1{
+        width: 100%;
+        margin:2px 3px;
+
+        font-weight: 700;
+        opacity: 0;
+       transition: opacity 1s ease-in-out;
+       border-radius: 10px;
+       border: 5px solid #2f4056;
+       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+    .about1 h5{
+    	width:90vw;
+    	color:  black;
+    	font-size: 15px;
+        font-weight: 700;
+    }
+    .about1 h5::before{
+        content:'';
+    	display: inline-block;
+    	width:10px;
+    	height:20px;
+    	margin-right: 10px;
+      margin-left: 10px;
+    	background-color: black;
+    }
+    .about1 p{
+        color:  black;
+        font-size: 15px;
+    	line-height: 1.8;
+    	margin: 3px 3px;
+    	text-indent:2em
+    }
+    .about2{
+        width: 100%;
+        margin:2px 3px;
+
+        font-weight: 700;
+        opacity: 0;
+       transition: opacity 1s ease-in-out;
+       border-radius: 10px;
+       border: 5px solid #2f4056;
+       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+    .about2 h5{
+    	width:90vw;
+    	color:  black;
+    	font-size: 15px;
+        font-weight: 700;
+    }
+    .about2 h5::before{
+        content:'';
+    	display: inline-block;
+    	width:10px;
+    	height:20px;
+    	margin-right: 10px;
+      margin-left: 10px;
+    	background-color: black;
+    }
+    .about2 p{
+        color:  black;
+        font-size: 15px;
+    	line-height: 1.8;
+    	margin: 3px 3px;
+    	text-indent:2em
+    }
+    .bottom{
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background-color: #2f4056;
+      text-align: center;
+      padding: 10px;
+    }
+    .site{
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800px;
+    }
+    .github{
+      width: 22px;
+      height: 22px;
+    }
     </style>
 </head>
 
@@ -72,12 +189,12 @@
         <div class="top">
             <h2>团队成员</h2>
             <ul>
-                <li>姚祉圻:编译器实现</li>
+                <li>姚祉圻：编译器实现</li>
                 <li></li>
-                <li>许仕佳</li>
-                <li>范嘉豪</li>
-                <li>梁国轩</li>
-                <li>欧宇杰</li>
+                <li>许仕佳：中间层序列化</li>
+                <li>范嘉豪：前端页面搭建，前后端交互</li>
+                <li>梁国轩：编译器调试，文档撰写</li>
+                <li>欧宇杰：前后端调试</li>
             </ul>
         </div>
         <div class="bottom">
@@ -86,15 +203,49 @@
     </aside>
     <article>
         <div id="carousel" class="uml1block">
-          <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png"  alt=""></a>
+          
           <a href="./img/uml2.jpg" data-lightbox="image"><img src="./img/uml2.jpg"  alt=""></a>
+          <a href="./img/uml1.png" data-lightbox="image"><img src="./img/uml1.png"  alt=""></a>
           <a href="./img/uml3.jpg" data-lightbox="image"><img src="./img/uml3.jpg"  alt=""></a>
+          <a href="./img/uml4.jpg" data-lightbox="image"><img src="./img/uml4.jpg"  alt=""></a>
+          <a href="./img/uml5.jpg" data-lightbox="image"><img src="./img/uml5.jpg"  alt=""></a>
+          <a href="./img/uml6.jpg" data-lightbox="image"><img src="./img/uml6.jpg"  alt=""></a>
+          <a href="./img/uml7.jpg" data-lightbox="image"><img src="./img/uml7.jpg"  alt=""></a>
             <button id="prev"><</button>
             <button id="next">></button>
           </div>
           <div class="container">
-            <div id="main" style="width: 650px;height:550px;"></div>
-            <div class="introduce"></div>  
+            <div id="main" style="width: 650px;height:650px;"></div>
+            <div class="introduce">
+
+              <div class="about">
+                <h5>项目名称：Visual Decaf</h5>
+                <p> 项目背景：为了模拟编译器的词法分析（Lexical analysis）、语法分析（Syntax Analysis)、语义分析（semantic Analysis)、中间代码生成（IR Generation)和虚拟机（Virtual Machine)我们小组决定开发一个Decaf编译过程可视化项目作为辅助工具。选择Decaf这门语言是因为它是一种教学语言，能够很好地帮助初学者理解编程的基本概念。
+                    在未来我们会迭代支持更多的语言进行编译可视化
+                </p>
+            </div>
+
+            <div class="about1">
+              <h5>创新点与项目特色</h5>
+              <p> 通过调研，目前并没有对编译过程可视化的相关软件，软件开发在编译可视化方面是一个空缺，我们编译的时候通常只能关注到写入代码和输出，而缺乏对整个编译过程的认知。我们实际上编写了一个可运行的编译器，
+                可以支持四则基本运算、基本数据类型（INT、DOUBLE、FLOAT、STRING）、关键字、控制流（IF、WHILE、FOR）、虚拟机（Virtual Machine)等，通过GO语言作为中间层将编译过程的数据（TOKEN流、语法树、字节码、汇编码、符号表、堆栈）内容通过接口传递到前端，
+                前端运用Vue框架和JavaScript渲染，实现Ace（编辑器）、Vis（语法树）、Anima(堆栈)、Grid(符号表)的可视化实现。
+              </p>
+           </div>
+
+           <div class="about2">
+            <h5>团队协作与功能实现</h5>
+            <p> 本次开发依照敏捷开发[agile]、统一过程[Unified Process]，以五天为一个迭代周期，实际开发过程历时一个余月。以github为代码管理平台和迭代同步平台。
+                编译器用C++11实现，用Cmake严格按照单元测试，以及用github分支合并，实现了Flex、Bison、VM，提交次数400+。中间序列化以Go语言实现，以Apifox为接口文档，将编译过程的数据通过服务器传递到前端。
+                前端实现功能：密码验证登录、加载、编辑框输入代码（Ace.js)、代码语法高亮、代码可折叠、生成Token流、语法树可视化（Vis.js),字节码生成、堆栈可视化（Anima.js)、代码调试器跳转、符号表（Grid.js),图片展示（lightBox.js)
+            </p>
+         </div>
+
+            </div>  
+          </div>
+          <div class="bottom">
+              <img src="./img/github.png" alt="" class="github">
+              <a href="https://github.com/visual-decaf" class="site">https://github.com/visual-decaf</a>
           </div>
          
     </article>
@@ -134,8 +285,27 @@
       });
       
       showItem(current);
-     </script>
 
+      // 在页面加载完成后将 about 元素的 opacity 值从 0 变为 1
+     document.addEventListener("DOMContentLoaded", function() {
+       var about = document.querySelector(".about");
+       about.style.opacity = "1";
+     });
+
+     // 在页面加载完成后将 about 元素的 opacity 值从 0 变为 1
+           document.addEventListener("DOMContentLoaded", function() {
+             var about1 = document.querySelector(".about1");
+             about1.style.opacity = "1";
+           });
+
+           document.addEventListener("DOMContentLoaded", function() {
+             var about2 = document.querySelector(".about2");
+             about2.style.opacity = "1";
+           });
+           </script>
+           
+
+<!-- 玫瑰图的script -->
 <script type="text/javascript">
 var chartDom = document.getElementById('main');
 var myChart = echarts.init(chartDom);
@@ -165,7 +335,6 @@ option = {
         borderRadius: 8
       },
       data: [
-
         { value: 11, name: 'Lex' },
         { value: 10, name: 'CSS' },
         { value: 18, name: 'GO' },
