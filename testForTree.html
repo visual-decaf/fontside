@@ -80,7 +80,7 @@
                 </div>
             </div>
     
-            <div class="container2">
+            <div class="container2" onselectstart="return false">
                 <div class="about">
                     <h5>sacnner</h5>
                     <p> scanner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
@@ -125,7 +125,7 @@
                     <div class="stack" >
                         <div class="stackblock" id="stackblock"></div>
                         <div class="resultblock" id="resultblock">
-                            Result: 
+                            PRINT: 
                         </div>
                     </div>
                     <!-- <div class="result">
@@ -136,7 +136,7 @@
                   </div>
                   </div>
 
-                  <div id="editor1"></div>
+                  <div class="editor1" id="editor1" onselectstart="return false"></div>
                   <div class="table2" id="symbolTable"></div>
                 </div>
                 
@@ -150,13 +150,28 @@
 
 
     <script>
-        
+    var ipaddr= "172.20.22.166";
+    //   渲染编辑器
+    var editor = ace.edit("editor", {
+    theme: "ace/theme/monokai",
+    mode: "ace/mode/javascript",
+    autoScrollEditorIntoView: true,
+    });
+    // editor.setValue("function foo(items) {var x = ");
+
+    var editor1 = ace.edit("editor1", {
+     theme: "ace/theme/tomorrow_night_blue",
+     mode: "ace/mode/javascript",
+     autoScrollEditorIntoView: true,
+     });
+     editor1.setHighlightActiveLine(true);
+
     const symtable_container = document.getElementById('symbolTable');
     var grid = new gridjs.Grid({
     columns:["index","type","value"],
     data:[]
     })
-    grid.render(document.getElementById("symbolTable"));
+    grid.render(symtable_container);
     //user-id
     var id="null";
     var xhr = new XMLHttpRequest();
@@ -167,7 +182,7 @@
               console.log(id);
               }
               });
-    xhr.open("GET", "http://172.20.22.166:8080/enter/id");
+    xhr.open("GET", "http://"+ipaddr+":8080/enter/id");
     xhr.send();
 
     //Initialized var for syntax tree
@@ -179,28 +194,26 @@
     function buildtree(data,parentid,nodelevel){
         let currentid=count;
         console.log(data);
-        if(!('list' in data)){
-            nodelist.push({id: count, label: data.value.toString(), level: nodelevel});
-            if(parentid!=0) edgelist.push({from: parentid, to: count});
+        if(!('list' in data.stmt)){
+            console.log(data);
+            console.log("good")
+            console.log(data.stmt);
+            nodelist.push({id: count, label: data.stmt.value.toString(), level: nodelevel, shape: 'box'});
+            if(parentid!=0) edgelist.push({from: parentid, to: count, label: data.relation, font:{align: 'top'}});
+            console.log(data.relation);
             count++;
         }
         else{
-            nodelist.push({id: count, label: data.name, level: nodelevel});
-            if(parentid!=0) edgelist.push({from: parentid, to: count});
+            nodelist.push({id: count, label: data.stmt.name, level: nodelevel, shape: 'box'});
+            if(parentid!=0) edgelist.push({from: parentid, to: count, label: data.relation, font:{align: 'top'}});
             count++;
-            data.list.forEach(function(element,index){
+            data.stmt.list.forEach(function(element,index){
                 buildtree(element, currentid, nodelevel+1);
             })
         }
     }
 
-        //   渲染编辑器
-        var editor = ace.edit("editor", {
-        theme: "ace/theme/monokai",
-        mode: "ace/mode/javascript",
-        autoScrollEditorIntoView: true,
-        });
-        // editor.setValue("function foo(items) {var x = ");
+
         var myButton = document.getElementById("myButton");
         editor.session.on("change", function () {
         if (editor.getValue().trim().length > 0) {
@@ -221,9 +234,41 @@
            editor.setValue(scanner.value);
        });
 
+       function init(){
+        let token_text = document.getElementById("token_scanner");
+        token_text.value="";
+        if(document.getElementById("syntax_tree").hasChildNodes())
+        document.getElementById("syntax_tree").innerHTML="";
+
+        document.getElementById("byte_code").value="";
+
+        if(document.getElementById("stackblock").hasChildNodes())
+        document.getElementById("stackblock").innerHTML="";
+
+        editor1.setValue("");
+
+        grid.destroy();
+        grid = new gridjs.Grid({
+        columns:["index","type","value"],
+        data:[]
+        })
+         grid.render(symtable_container);
+
+        document.getElementById("myButton2").disabled = true;
+        document.getElementById("myButton2").style.backgroundColor = "";
+        document.getElementById("myButton3").disabled = true;
+        document.getElementById("myButton3").style.backgroundColor = "";
+        document.getElementById("myButton4").disabled = true;
+        document.getElementById("myButton4").style.backgroundColor = "";
+        document.getElementById("myButton5").disabled = true;
+        document.getElementById("myButton5").style.backgroundColor = "";
+       }
+
        // 对myButton1点击事件的响应
        myButton.addEventListener("click", function() {
        if (!myButton.disabled) {
+       //清空之前的所有输出：
+       init();
         console.log(editor.getValue());
         
         //发送post请求
@@ -237,11 +282,15 @@
             console.log(this.responseText);
         }
         });
-        xhr.open("POST", "http://172.20.22.166:8080/code?id="+id.toString());
+        xhr.open("POST", "http://"+ipaddr+":8080/code?id="+id.toString());
         xhr.send(data);
 
         myButton.disabled = true;
         myButton.style.backgroundColor = "";
+        setTimeout(function(){
+            myButton.disabled = false;
+        myButton.style.backgroundColor = "blue";
+        },300)
         document.getElementById("myButton2").disabled = false;
         document.getElementById("myButton2").style.backgroundColor = "blue";
 
@@ -300,7 +349,7 @@
         });
         }
         });
-        xhr.open("GET", "http://172.20.22.166:8080/tokens?id="+id.toString());
+        xhr.open("GET", "http://"+ipaddr+":8080/tokens?id="+id.toString());
         xhr.send();
         
 
@@ -373,19 +422,12 @@
         count=1;
         }
         });
-        xhr.open("GET", "http://172.20.22.166:8080/ast?id="+id.toString());
+        xhr.open("GET", "http://"+ipaddr+":8080/ast?id="+id.toString());
         xhr.send();
         //document.getElementById("myButton4").disabled = false;
         //document.getElementById("myButton4").style.backgroundColor = "blue";
       }
       });
-     var editor1 = ace.edit("editor1", {
-     theme: "ace/theme/tomorrow_night_blue",
-     mode: "ace/mode/javascript",
-     autoScrollEditorIntoView: true,
-     });
-     editor1.setHighlightActiveLine(true);
-
   // 对myButton4点击事件的响应
   document.getElementById("myButton4").addEventListener("click", function() {
         if (!document.getElementById("myButton4").disabled) {
@@ -406,6 +448,15 @@
             console.log(jsonStr);
             let assemblyStr=jsonStr.result.assembly;
             let bytecodeStr=jsonStr.result.bytecode;
+            let constanPool=jsonStr.result.constantPool;
+            console.log(constanPool);
+            let poolArr=Object.keys(constanPool);
+            console.log(poolArr);
+            let constPoolStr="";
+            poolArr.forEach(function(item,index){
+                constPoolStr+=item+": "+constanPool[item]+"\n";
+            })
+
             var str='';
             console.log(assemblyStr);
             assemblyStr.forEach(element => {
@@ -413,10 +464,10 @@
             })
             editor1.setValue(str,-1);
             editor1.setReadOnly(true);
-            token_text.value="Byte code: "+bytecodeStr+"\nAssembly: \n"+str;
+            token_text.value="Byte code: "+bytecodeStr+"\n\nAssembly: \n"+str+"\nConstant Pool: \n"+constPoolStr;
         }
         });
-        xhr.open("GET", "http://172.20.22.166:8080/program?id="+id.toString());
+        xhr.open("GET", "http://"+ipaddr+":8080/program?id="+id.toString());
         xhr.send();
       }
       });
@@ -438,7 +489,7 @@
         nextStep();
     }
     });
-    xhr.open("GET", "http://172.20.22.166:8080/debug?id="+id.toString());
+    xhr.open("GET", "http://"+ipaddr+":8080/debug?id="+id.toString());
     xhr.send();
     })
     var table = document.getElementById("table1");
@@ -519,9 +570,9 @@
         stepTable.forEach(function(item,index){
             console.log("value.value is:"+item.value.value)
             mydata.push({
-                index: item.index,
-                type: item.value.value.type,
-                value: item.value.value.value
+                index: item.index.toString(),
+                type: item.value.value.type.toString(),
+                value: item.value.value.value.toString()
             })
         })
     symtable_container.innerHTML = ''; // 清空容器元素的内容
@@ -562,7 +613,7 @@
                 }
                 if(step.operation =="PRINT"){
                     console.log(step.item);
-                    document.getElementById("resultblock").textContent= "Result: "+step.item;
+                    document.getElementById("resultblock").textContent= "PRINT: "+step.item;
                     setTimeout(function(){
                         deal(index+1);
                     },550)

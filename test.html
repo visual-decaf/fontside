@@ -1,32 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="./node_modules/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
-    <!-- <link
-      href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
-      rel="stylesheet"
-    /> -->
-
+  <title>Stack Demo</title>
+  <style>
+    .stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stack-item {
+      width: 100px;
+      height: 50px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+  </style>
 </head>
 <body>
-    <div id="wrapper"></div>
+  <div class="stack"></div>
+  <button id="push">Push</button>
+  <button id="pop">Pop</button>
+  <script>
+const hostIP = window.location.host;
+var domain = document.domain;
+console.log(domain+"good"); // 输出类似 "192.168.0.1"
 
-    <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
-    <!-- <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script> -->
-    <script >
-		new gridjs.Grid({
-    columns: ["Name", "Email", "Phone Number"],
-    data: [
-      ["John", "john@example.com", "(353) 01 222 3333"],
-      ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
-      ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
-      ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
-      ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
-    ]
-  }).render(document.getElementById("wrapper"));
-	</script>
+     </script>
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<!-- <script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script> -->
+<script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
 </body>
 </html>

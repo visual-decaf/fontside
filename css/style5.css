@@ -272,8 +272,10 @@ body{
     margin: 7px;
     opacity: 0.7;
     font-size: 7px;
+
 }
 #editor1{
+    
     width: 45%;
     height: 100%;
     border: 3px solid #ccc;
@@ -292,6 +294,10 @@ body{
     font-size:10px;
     font-family: 'Signika', cursive;
     font-weight: 800;
+    user-select: none; /* 阻止用户选择文本 */
+    -moz-user-select: none; /* 兼容 Firefox */
+    -webkit-user-select: none; /* 兼容 Chrome, Safari, Opera */
+    -ms-user-select: none; /* 兼容 IE 和 Edge */
 }
 .syntaxtree{
     width: 95%;
