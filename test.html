@@ -1,65 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>图片展示器</title>
-	<style>
-		#gallery {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-items: center;
-		}
-		#gallery img {
-			max-width: 100%;
-			height: auto;
-			margin-bottom: 20px;
-			cursor: pointer;
-		}
-		#image-modal {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: rgba(0,0,0,0.8);
-			z-index: 9999;
-		}
-		#image-modal img {
-			max-width: 90%;
-			max-height: 90%;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./node_modules/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <!-- <link
+      href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+      rel="stylesheet"
+    /> -->
+
 </head>
 <body>
-	<div id="gallery">
-		<img src="./img/uml1.png" alt="">
-		<img src="./img/uml2.jpg" alt="">
-		<img src="./img/uml3.jpg" alt="">
-	</div>
-	<div id="image-modal">
-		<img src="" />
-	</div>
-	<script src="gallery.js"></script>
-<script>
-    const gallery = document.getElementById('gallery');
-const modal = document.getElementById('image-modal');
-const modalImg = document.querySelector('#image-modal img');
+    <div id="wrapper"></div>
 
-gallery.addEventListener('click', (event) => {
-  if (event.target.tagName === 'IMG') {
-    modal.style.display = 'block';
-    modalImg.src = event.target.src;
-  }
-});
-
-modal.addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-</script>
+    <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
+    <!-- <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script> -->
+    <script >
+		new gridjs.Grid({
+    columns: ["Name", "Email", "Phone Number"],
+    data: [
+      ["John", "john@example.com", "(353) 01 222 3333"],
+      ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
+      ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
+      ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
+      ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
+    ]
+  }).render(document.getElementById("wrapper"));
+	</script>
 </body>
 </html>
