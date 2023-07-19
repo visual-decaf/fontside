@@ -599,15 +599,16 @@
             complete:function(){
                 console.log("deleted susccess");
                 stackContainer.removeChild(lastItem);
-                document.getElementById("myButton5").disabled = false;
+                //document.getElementById("myButton5").disabled = false;
             }
         })
         // await delay(550);
     }
     
     function nextStep(){
-        document.getElementById("myButton5").style.backgroundColor = "";
         document.getElementById('myButton5').disabled=true; 
+        document.getElementById("myButton5").style.backgroundColor = "";
+
         if(stmt_counter+1 > queue.length){
             stmt_counter=0;
             return;
@@ -636,8 +637,8 @@
     function deal(index){
         if(index+1>queue[stmt_counter].steps.length) {
             stmt_counter++;
-            document.getElementById("myButton5").style.backgroundColor = "blue";
             document.getElementById('myButton5').disabled=false; 
+            document.getElementById("myButton5").style.backgroundColor = "blue";
             return;
         }
         var step = queue[stmt_counter].steps[index];
@@ -664,7 +665,7 @@
                     document.getElementById("resultblock").textContent= "PRINT: "+step.item;
                     setTimeout(function(){
                         deal(index+1);
-                    },550)
+                    },600)
                 }
     }
 
