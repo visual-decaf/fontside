@@ -2,5 +2,15 @@
   "dependencies": {
     "animejs": "^3.2.1",
     "gridjs": "^6.0.6"
-  }
+  },
+  "devDependencies": {
+    "electron": "^25.3.0"
+  },
+  "name":"my-app",
+  "version":"1.0.0",
+  "main":"main.js",
+  "scripts":{
+    "start":"electron ."
+  } 
 }
+

@@ -379,6 +379,7 @@
                     linequeue=[];
                 }
             })
+            if(linequeue.length!=0)  linesqueue.push(linequeue);
             var tokensContainer = document.getElementById("tokens");
             linesqueue.forEach(function(innerline,index_1){
                 var lineContainer = document.createElement('div');
