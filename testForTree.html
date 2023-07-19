@@ -403,10 +403,11 @@
                         placement: 'auto',
                         duration: [500,0]
                     });
-
                     
                 })
             })
+            linesqueue=[];
+            linequeue=[];
 
         }
         else{ //输出错误信息
@@ -608,6 +609,7 @@
         document.getElementById("myButton5").style.backgroundColor = "";
         document.getElementById('myButton5').disabled=true; 
         if(stmt_counter+1 > queue.length){
+            stmt_counter=0;
             return;
         };
         var mydata=[];

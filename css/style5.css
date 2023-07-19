@@ -316,13 +316,14 @@ body{
 }
 .tokenblock{
     border-radius: 5px;
-    height: 2em;
-    width: 4em;
+    height: 30px;
+    width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
     text-align: center;
+    font-size: 10;
     opacity: 0.5;
 }
 
@@ -393,16 +394,17 @@ body{
 }
 .block{
     border-radius: 10px;
-    height: 5.5em;
-    width: 17em;
+    height: 40px;
+    width: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
     text-align: center;
     opacity: 0.5;
-    font-size: 13px;
+    font-size: 30px;
     font-weight: 700;
+    line-height: 100%;
 }
 .stack{
     width: 100%;
@@ -418,8 +420,8 @@ body{
     border-radius: 10px;
     display: flex;
     flex-direction: column-reverse;
-    width: 17em;
-    height: 43em;
+    width: 120px;
+    height: 300px;
     background-color: #fff;
     overflow:auto;
     border: 5px solid #000;
