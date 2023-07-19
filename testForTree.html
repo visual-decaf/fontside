@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>visual decaf</title>
+    <title>Visual Decaf</title>
     <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_module/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
     <script src="./node_module/animejs/lib/anime.js"></script>
@@ -23,6 +23,39 @@
        background-color: rgb(74, 14, 14);
        border-radius: 10px;
        }
+       .layui-form{
+        width: 10vw;
+        height: 100%;
+       }
+
+       .layui-form {
+    width: 10vw;
+    height: 100%;
+    margin-top: 8px;
+}
+.layui-form-item {
+    position: relative;
+    margin-bottom: 15px;
+    clear: both;
+}
+.layui-form-label {
+    position: relative;
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    width: 80px;
+    font-weight: 800px;
+    line-height: 20px;
+    color: #fff;
+    text-align: right;
+    font-size: larger;
+}
+.head.black {
+    background-color: #16baaa!important; /* 当开关为开时的颜色 */
+  width: 100%;
+    height: 60px;
+    margin: 0%;
+}
     </style>
 </head>
 
@@ -39,6 +72,14 @@
             <div class="logo">
                 <img src="./img/logo.png" alt="SVG Image" > 
                 <h4>visual decaf</h4>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                      <label class="layui-form-label">主题</label>
+                      <div class="layui-input-block">
+                        <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" title="ON|OFF">
+                      </div>
+                    </div>
+                  </form>
                 <ul class="layui-nav layui-bg-cyan">
                     <li class="layui-nav-item"><a href="./testForTree.html">开始使用</a></li>
                     <li class="layui-nav-item" id="image-item">菜单1</li>
@@ -53,7 +94,9 @@
                     </li>
                     <li class="layui-nav-item end"><a href="./testForTree.html">结束使用</a></li>
                 </ul>
+
             </div>
+
         </div>
     <aside>
         <div class="top">
@@ -76,7 +119,7 @@
         <div class="topcontainer">
             <div class="container1">
                 <div class="about">
-                    <h5>compiler</h5>
+                    <h5>Code Editor</h5>
                     <p> 请在下面输入你的decaf代码,点击提交即可开始编译</p>
                 </div>
                 <div id="editor"></div>
@@ -87,7 +130,7 @@
     
             <div class="container2" onselectstart="return false">
                 <div class="about">
-                    <h5>sacnner</h5>
+                    <h5>Scanner</h5>
                     <p> scanner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
                         展示将输入的字符串转化为可视化的token流</p>
                 </div>
@@ -100,8 +143,8 @@
     
             <div class="container3">
                 <div class="about">
-                    <h5>parser</h5>
-                    <p> parser将token流转化为syntax tree</p>
+                    <h5>Parser</h5>
+                    <p> Parser将token流转化为Syntax Tree（语法树）</p>
                 </div>
                 <div class="syntaxtree" id="syntax_tree"></div>
                 <div class="btn">
@@ -112,8 +155,8 @@
         <div class="topcontainer2">
             <div class="container4">
                 <div class="about">
-                    <h5>semantic analysize</h5>
-                    <p>生成bytecode</p>
+                    <h5>Semantic Analysize</h5>
+                    <p>生成Bytecode（中间码）与常量池</p>
                 </div>
                 <textarea class="bytecode" id = "byte_code"></textarea>
                 <div class="btn">
@@ -123,7 +166,7 @@
             <div class="container5">
                 <div class="about">
                     <h5>堆栈，编辑器，符号表</h5>
-                    <p> 动态堆栈展示  编辑器跳转  符号表</p>
+                    <span> 动态堆栈展示</span> <span>编辑器跳转</span>   <span>符号表</span>
                 </div>
                 <div class="table"> 
                   <div class="table1" id="table1">
@@ -695,6 +738,38 @@
     }
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>
+     <script>
+        layui.use(['form', 'laydate', 'util'], function(){
+  var form = layui.form;
+  // 指定开关事件
+//   form.on('switch(switchTest)', function(data){
+//     layer.msg('开关 checked：'+ (this.checked ? 'true' : 'false'), {
+//       offset: '6px'
+//     });
+//     layer.tips('主题已切换', data.othis)
+//   });
+var bgElement = document.querySelector('.layui-nav');
+var articleElement = document.querySelector('article');
+  form.on('switch(switchTest)', function(data){
+    if (this.checked) {
+      // 如果开关为开，则将元素的类名更改为“head black”以更改其颜色
+      document.querySelector('.head').classList.add('black');
+      layer.tips('主题已切换', data.othis)
+      bgElement.classList.remove('layui-bg-cyan');
+      bgElement.classList.add('layui-bg-green');
+      articleElement.style.backgroundColor = '#E0FFFF';
+    } else {
+      // 如果开关为关，则将元素的类名更改为“head”以恢复其原始颜色
+      document.querySelector('.head').classList.remove('black');
+      bgElement.classList.remove('layui-bg-green');
+      bgElement.classList.add('layui-bg-cyan');
+      articleElement.style.backgroundColor = '#f5f5dc';
+    }
+  });
+});
+
+     </script>
+     
 </body>
 
 </html>
