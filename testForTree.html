@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>visual decaf</title>
     <script src="./ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="./node_modules/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
-    <script src="./node_modules/animejs/lib/anime.js"></script>
-    <script src="./node_modules/gridjs/dist/gridjs.umd.js"></script>
-    <link href="./node_modules/gridjs/dist/theme/mermaid.css" rel="stylesheet">
-    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  -->
-   <link rel="stylesheet" href="css/style5.css">
-   <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
+    <script src="./node_module/vis-network/dist/vis-network.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./node_module/animejs/lib/anime.js"></script>
+    <script src="./node_module/gridjs/dist/gridjs.umd.js"></script>
+    <script src="./node_module/tippy.js/dist/tippy-bundle.umd.js" type="text/javascript" charset='utf-8'></script>
+    <script src="./node_module/tippy.js/dist/tippy-bundle.umd.min.js" type="text/javascript" charset='utf-8'></script>
+    <link href="./node_module/gridjs/dist/theme/mermaid.css" rel="stylesheet">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="./node_module/tippy.js/themes/light.css">
+    <link rel="stylesheet" href="./node_module/tippy.js/animations/scale.css">
+    <link rel="stylesheet" href="css/style5.css">
+    <link href="./layui-v2.8.10/layui-v2.8.10/layui/css/layui.css" rel="stylesheet">
     <style>
        .layui-nav-item.end:hover {
        background-color: rgb(74, 14, 14);
@@ -86,7 +91,8 @@
                     <p> scanner是将字符串转化为token流的一个工具，也叫词法分析器，在下面的示例中，
                         展示将输入的字符串转化为可视化的token流</p>
                 </div>
-                <textarea class="scanner" id ="token_scanner"></textarea>
+                <!-- <textarea class="scanner" id ="token_scanner"></textarea> -->
+                <div class="scanner" id="tokens"></div>
                 <div class="btn">
                     <button id="myButton2" disabled>生成Token</button>
                 </div>
@@ -150,7 +156,10 @@
 
 
     <script>
+
     var ipaddr= "172.20.22.166";
+    let linequeue=[];
+    let linesqueue=[];
     //   渲染编辑器
     var editor = ace.edit("editor", {
     theme: "ace/theme/monokai",
@@ -230,15 +239,17 @@
     //     scanner.value = editor.getValue();
     //    });
    
-       scanner.addEventListener("input", function() {
-           editor.setValue(scanner.value);
-       });
+    //    scanner.addEventListener("input", function() {
+    //        editor.setValue(scanner.value);
+    //    });
 
        function init(){
-        let token_text = document.getElementById("token_scanner");
-        token_text.value="";
+        // let token_text = document.getElementById("token_scanner");
+        // token_text.value="";
         if(document.getElementById("syntax_tree").hasChildNodes())
         document.getElementById("syntax_tree").innerHTML="";
+
+        document.getElementById("tokens").innerHTML="";
 
         document.getElementById("byte_code").value="";
 
@@ -305,32 +316,7 @@
         document.getElementById("myButton2").style.backgroundColor = "";
         document.getElementById("myButton3").disabled = false;
         document.getElementById("myButton3").style.backgroundColor = "blue";
-        let jsonStr = {
-        "code": "1",
-        "msg": "操作成功",
-        "result": [
-        {
-            "type": "YYEOF",
-            "lexeme": "incididunt"
-        },
-        {
-            "type": "MINUS",
-            "lexeme": "aute officia quis"
-        },
-        {
-            "type": "PLUS",
-            "lexeme": "ex dolor labore eu"
-        },
-        {
-            "type": "EOL",
-            "lexeme": "et sit dolore qui amet"
-        },
-        {
-            "type": "INTEGER",
-            "lexeme": "consectetur dolor irure officia"
-        }
-        ]
-        }
+        let jsonStr = {};
         //发送请求获取json
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -339,16 +325,52 @@
         if(this.readyState === 4) {
             console.log("tokens accepted"+this.responseText);
             jsonStr = JSON.parse(this.responseText);
-            let token_text = document.getElementById("token_scanner");
-            console.log(jsonStr);
+        if(jsonStr.code == "1"){
             let tokenlist=jsonStr.result;
-            console.log(tokenlist);
-            tokenlist.forEach(element => {
-            token_text.value+=('<'+element.type+', '+element.lexeme+'>\n');
-            console.log('<'+element.type+', '+element.lexeme+'>');
-        });
+            tokenlist.forEach(element=>{
+                if(element.lexeme !=';')
+                    linequeue.push(element);
+                else{
+                    linequeue.push(element);
+                    linesqueue.push(linequeue);
+                    linequeue=[];
+                }
+            })
+            var tokensContainer = document.getElementById("tokens");
+            linesqueue.forEach(function(innerline,index_1){
+                var lineContainer = document.createElement('div');
+                lineContainer.setAttribute('id',"line"+index_1.toString());
+                lineContainer.classList.add('tokenqueue');
+                tokensContainer.appendChild(lineContainer);
+                innerline.forEach(function(item,index_2){
+                    var str= "block"+index_1.toString()+index_2.toString();
+                    var tokenblock = document.createElement('div');
+                    tokenblock.setAttribute('id',str);
+                    tokenblock.classList.add('tokenblock');
+                    tokenblock.textContent=linesqueue[index_1][index_2].lexeme;
+                    tokenblock.style.backgroundColor = getRandomColor();
+                    lineContainer.appendChild(tokenblock);
+                    tippy(document.getElementById(str), {
+                        content: "<div>type: "+linesqueue[index_1][index_2].type+"</div>",
+                        theme: 'light',
+                        allowHTML: true,
+                        animation: 'fade',
+                        maxWidth: 'none',
+                        zIndex: 1,
+                        placement: 'auto',
+                        duration: [500,0]
+                    });
+
+                    
+                })
+            })
+
         }
-        });
+        else{ //输出错误信息
+            console.log(jsonStr.msg);
+            showError(jsonStr.msg);
+        }
+        }});
         xhr.open("GET", "http://"+ipaddr+":8080/tokens?id="+id.toString());
         xhr.send();
         
@@ -366,40 +388,16 @@
         var syntaxtree = document.getElementsByClassName("syntaxtree")[0];
         syntaxtree.style.backgroundColor = "white";
         //json-interface
-        let jsonStr = {
-    "code": "1",
-    "msg": "Success",
-    "result": {
-        "type": "PrintStmt",
-        "name": "PrintStmt",
-        "list": [
-            {
-                "type": "IntConstant",
-                "value": 1,
-                "resultType": "INT"
-            },
-            {
-                "type": "IntConstant",
-                "value": 2,
-                "resultType": "INT"
-            },
-            {
-                "type": "IntConstant",
-                "value": 3,
-                "resultType": "INT"
-            }
-        ],
-        "resultType": "VOID"
-    }
-    }
+        let jsonStr = {};
         //发送请求获取json
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
 
         xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
-            jsonStr = JSON.parse(this.responseText);
-            buildtree(jsonStr.result,0,1);
+        jsonStr = JSON.parse(this.responseText);
+        if(jsonStr.code == "1"){
+        buildtree(jsonStr.result,0,1);
         console.log(nodelist);
         console.log(edgelist);
         let nodes = new vis.DataSet(nodelist);
@@ -420,6 +418,12 @@
         nodelist = [];
         edgelist = [];
         count=1;
+        }
+        //错误处理
+        else{
+            console.log(jsonStr.msg);
+            showError(jsonStr.msg);
+        }
         }
         });
         xhr.open("GET", "http://"+ipaddr+":8080/ast?id="+id.toString());
@@ -529,7 +533,6 @@
         newItem.style.display = 'none';
         stackContainer.appendChild(newItem);
         // stackContainer.insertBefore(newItem, stackContainer.firstChild);
-
         newItem.style.display = 'block';
         anime({
             targets: newItem,
@@ -619,6 +622,60 @@
                     },550)
                 }
     }
+
+    //tokens队列生成器
+    // function pushtoken(linesqueue,linenum,index){
+    //     if(linenum>=linesqueue.length || index>=linesqueue[linenum].length) return;
+    //     if(index==0){
+    //         var line=document.createElement('div');
+    //         line.classList.add('tokenqueue');
+    //         line.setAttribute("id","line"+linenum.toString());
+    //         document.getElementById("tokens").appendChild(line);
+    //     }
+    //     var item = linesqueue[linenum][index];
+    //     console.log(item);
+    //     var newItem = document.createElement('div');
+    //     var str ="tokenblock"+linenum.toString()+index.toString();
+    //     newItem.setAttribute('id',str);
+    //     tippy(document.getElementById(str), {
+    //     content: "<div>"+item.type+" "+item.lexeme+"</div>",
+    //     theme: 'light',
+    //     allowHTML: true,
+    //     animation: 'fade',
+    //     maxWidth: 'none',
+    //     zIndex: 1,
+    //     placement: 'auto',
+    //     duration: [500,0]
+    //   });
+    //     newItem.classList.add('tokenblock');
+    //     newItem.textContent=item.lexeme;
+    //     newItem.style.backgroundColor = getRandomColor();
+    //      // 设置新的堆栈项元素的初始状态
+    //     newItem.style.opacity = 0;
+    //     newItem.style.transform = 'translateX(100px)';
+
+    //     // 添加新的堆栈项元素到堆栈容器之前隐藏它
+    //     newItem.style.display = 'none';
+    //     document.getElementById("line"+linenum.toString()).appendChild(newItem);
+
+
+    //     newItem.style.display = 'block';
+    //     anime({
+    //         targets: newItem,
+    //         translateX: [100, 0],  // 控制垂直位移从 100px 到 0px 的动画效果
+    //         opacity: [0, 1],  // 控制透明度从 0 到 1 的动画效果
+    //         duration: 500,  // 动画持续时间为 0.5 秒
+    //         easing: 'easeOutExpo'  // 使用缓动函数控制动画速度
+    //     });
+    //     setTimeout(function(){
+    //         pushtoken(linesqueue,linenum,index+1);
+    //         setTimeout(function(){
+    //             pushtoken(linesqueue,linenum+1,index);
+    //         },100)
+    //     },1000);
+    // }
+
+
     // 生成随机颜色函数
     function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -631,6 +688,10 @@
     //指定延迟用
     function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function showError(errorText) {
+        alert(errorText);
     }
      </script>
      <script src="./layui-v2.8.10/layui-v2.8.10/layui/layui.js"></script>

@@ -285,6 +285,7 @@ body{
     font-size: 7px;
 }
 .scanner{
+    display: flex;
     width: 95%;
     height: 70%;
     border: 3px solid #ccc;
@@ -294,10 +295,27 @@ body{
     font-size:10px;
     font-family: 'Signika', cursive;
     font-weight: 800;
-    user-select: none; /* 阻止用户选择文本 */
-    -moz-user-select: none; /* 兼容 Firefox */
-    -webkit-user-select: none; /* 兼容 Chrome, Safari, Opera */
-    -ms-user-select: none; /* 兼容 IE 和 Edge */
+    flex-direction: column;
+    overflow-x: auto;
+    overflow-y: auto;
+    align-items: center;
+}
+.tokenqueue{
+    display: flex;
+    width:100%;
+    height:3em;
+    align-items: center;
+}
+.tokenblock{
+    border-radius: 5px;
+    height: 2em;
+    width: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    opacity: 0.5;
 }
 .syntaxtree{
     width: 95%;
@@ -536,4 +554,3 @@ article {
     width: 100%;
     background-color: #f5f5dc;
 }
-
